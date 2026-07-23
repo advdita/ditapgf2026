@@ -31,21 +31,21 @@
       position: fixed;
       top: 20px;
       right: 20px;
-      width: 280px;
-      max-width: 30vw;
-      background: rgba(0, 0, 0, 0.6);
+      width: 320px;
+      max-width: 35vw;
+      background: rgba(0, 0, 0, 0.65);
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-      border: 2px solid rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(6px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
       z-index: 999;
       transition: all 0.3s ease;
     }
 
     .video-stream-wrapper:hover {
       border-color: rgba(180, 140, 220, 0.7);
-      box-shadow: 0 16px 48px rgba(80, 40, 120, 0.35);
+      box-shadow: 0 16px 48px rgba(80, 40, 120, 0.4);
       transform: scale(1.02);
     }
 
@@ -63,11 +63,12 @@
     /* fallback jika video tidak bisa dimuat */
     .video-stream-wrapper .fallback-msg {
       display: none;
-      padding: 1rem;
+      padding: 1.2rem 0.8rem;
       color: #f0e6ff;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       text-align: center;
-      background: #1f1130;
+      background: #1a0e2a;
+      line-height: 1.6;
     }
 
     .video-stream-wrapper video:not(:valid) ~ .fallback-msg,
@@ -78,49 +79,76 @@
     /* label kecil di atas video */
     .stream-label {
       position: absolute;
-      top: 8px;
-      left: 12px;
-      background: rgba(0, 0, 0, 0.6);
+      top: 10px;
+      left: 14px;
+      background: rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(4px);
       color: #ddd0f0;
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.4px;
-      padding: 0.2rem 0.8rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 0.25rem 1rem;
       border-radius: 40px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       pointer-events: none;
       z-index: 10;
+      text-transform: uppercase;
     }
 
-    /* tombol close (opsional) */
+    /* tombol close */
     .stream-close {
       position: absolute;
-      top: 6px;
-      right: 10px;
-      background: rgba(0, 0, 0, 0.55);
+      top: 8px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(4px);
       color: #d4c0ee;
       border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 40px;
-      width: 28px;
-      height: 28px;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 1.1rem;
       cursor: pointer;
       z-index: 10;
-      transition: 0.2s;
+      transition: 0.25s ease;
       font-family: 'Inter', sans-serif;
       font-weight: 300;
       line-height: 1;
     }
 
     .stream-close:hover {
-      background: rgba(180, 60, 60, 0.7);
+      background: rgba(200, 60, 60, 0.8);
       border-color: #ff8a8a;
       color: white;
+      transform: rotate(90deg);
+    }
+
+    /* indikator live */
+    .live-indicator {
+      position: absolute;
+      bottom: 12px;
+      left: 14px;
+      background: rgba(255, 50, 50, 0.85);
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 0.2rem 0.7rem;
+      border-radius: 40px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px);
+      animation: pulse-dot 1.8s infinite;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
 
     /* ====== CARD UTAMA ====== */
@@ -353,30 +381,37 @@
       .video-stream-wrapper {
         top: 12px;
         right: 12px;
-        width: 180px;
-        max-width: 40vw;
+        width: 200px;
+        max-width: 45vw;
         border-radius: 14px;
       }
       .stream-label {
-        font-size: 0.5rem;
-        top: 5px;
-        left: 8px;
-        padding: 0.1rem 0.6rem;
+        font-size: 0.55rem;
+        top: 6px;
+        left: 10px;
+        padding: 0.15rem 0.7rem;
       }
       .stream-close {
-        width: 22px;
-        height: 22px;
+        width: 24px;
+        height: 24px;
         font-size: 0.8rem;
-        top: 4px;
-        right: 6px;
+        top: 5px;
+        right: 7px;
+      }
+      .live-indicator {
+        font-size: 0.5rem;
+        bottom: 8px;
+        left: 10px;
+        padding: 0.1rem 0.6rem;
       }
     }
 
     @media (max-width: 420px) {
       .video-stream-wrapper {
-        width: 140px;
+        width: 150px;
         top: 8px;
         right: 8px;
+        border-width: 1.5px;
       }
     }
   </style>
@@ -385,8 +420,9 @@
 
   <!-- ====== VIDEO STREAM ====== -->
   <div class="video-stream-wrapper" id="videoStreamWrapper">
-    <div class="stream-label">📡 LIVE · SANUR</div>
+    <div class="stream-label">📡 LIVE</div>
     <div class="stream-close" id="closeStreamBtn" title="Tutup stream">✕</div>
+    <div class="live-indicator">● LIVE</div>
 
     <!-- Menggunakan tag video untuk stream MJPEG/RTSP/HTTP -->
     <video 
@@ -395,17 +431,18 @@
       muted 
       playsinline 
       loop
-      src="http://10.101.209.90/"
+      src="http://10.101.209.90"
       onerror="this.style.display='none'; document.querySelector('.fallback-msg').style.display='block';"
     >
       <!-- fallback jika browser tidak support video -->
-      <p class="fallback-msg">⚠️ Stream tidak tersedia<br><span style="font-size:0.7rem;">http://10.101.209.90/</span></p>
+      <p class="fallback-msg">⚠️ Stream tidak tersedia<br><span style="font-size:0.7rem;">http://10.101.209.90</span></p>
     </video>
 
     <!-- fallback message (terlihat jika video gagal) -->
     <div class="fallback-msg" style="display:none;">
       ⚠️ Stream tidak dapat dimuat<br>
-      <span style="font-size:0.7rem; opacity:0.7;">http://10.101.209.90/</span>
+      <span style="font-size:0.7rem; opacity:0.7;">http://10.101.209.90</span>
+      <br><span style="font-size:0.6rem; opacity:0.5;">Pastikan alamat dapat diakses</span>
     </div>
   </div>
 
@@ -475,7 +512,7 @@
     </div>
   </div>
 
-  <!-- ====== SCRIPT UNTUK CLOSE STREAM ====== -->
+  <!-- ====== SCRIPT UNTUK CLOSE STREAM & RELOAD ====== -->
   <script>
     (function() {
       const wrapper = document.getElementById('videoStreamWrapper');
@@ -503,18 +540,31 @@
         });
       }
 
-      // Jika video gagal dimuat, tampilkan fallback (sudah ditangani via onerror)
-      // tambahan: coba reload jika terjadi error koneksi
+      // Jika video gagal dimuat, tampilkan fallback
       if (video) {
         video.addEventListener('error', function() {
-          // fallback sudah ditampilkan lewat onerror di tag video
-          // tapi kita tambahkan agar pesan fallback muncul
           const fallback = wrapper.querySelector('.fallback-msg');
           if (fallback) {
             fallback.style.display = 'block';
           }
-          // sembunyikan video agar tidak menampilkan kotak hitam kosong
           video.style.display = 'none';
+          
+          // Coba reload stream setelah 5 detik (jika gagal karena koneksi)
+          setTimeout(function() {
+            if (wrapper.style.display !== 'none') {
+              video.style.display = 'block';
+              video.src = 'http://10.101.209.90';
+              video.load();
+              video.play().catch(function() {
+                // Jika masih gagal, tampilkan fallback lagi
+                const fallback2 = wrapper.querySelector('.fallback-msg');
+                if (fallback2) {
+                  fallback2.style.display = 'block';
+                }
+                video.style.display = 'none';
+              });
+            }
+          }, 5000);
         });
 
         // Jika video berhasil dimuat, pastikan fallback tersembunyi
@@ -524,6 +574,12 @@
             fallback.style.display = 'none';
           }
           video.style.display = 'block';
+        });
+
+        // Coba play otomatis dengan penanganan error
+        video.play().catch(function(e) {
+          // Autoplay mungkin diblokir, tapi tidak masalah karena user bisa interaksi
+          console.log('Autoplay diblokir, stream tetap tersedia.');
         });
       }
 
