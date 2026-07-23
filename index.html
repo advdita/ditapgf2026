@@ -6,7 +6,7 @@
     <title>Adventia Putri Pradita · Guru Fisika</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
     <!-- MediaPipe FaceMesh -->
@@ -29,23 +29,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: radial-gradient(circle at 20% 30%, #fff9e6, #fdecc8);
-            font-family: 'Quicksand', sans-serif;
+            background: #fcf6e8;
+            font-family: 'Inter', sans-serif;
             padding: 1.5rem;
-            position: relative;
         }
 
+        /* ===== KARTU UTAMA - SIMPLE & MINIMALIS ===== */
         .card {
-            max-width: 800px;
+            max-width: 700px;
             width: 100%;
-            background: rgba(255, 248, 230, 0.85);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border-radius: 56px;
-            padding: 2rem 2rem 2.8rem;
-            box-shadow: 0 35px 60px -20px rgba(180, 140, 40, 0.3),
-                inset 0 1px 3px rgba(255, 245, 200, 0.8);
-            border: 1px solid rgba(255, 230, 150, 0.6);
+            background: #ffffff;
+            border-radius: 32px;
+            padding: 2.5rem 2.5rem 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06), 0 8px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid #f0ebe0;
             text-align: center;
             position: relative;
         }
@@ -55,11 +52,11 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            width: 320px;
-            border-radius: 20px;
+            width: 280px;
+            border-radius: 18px;
             overflow: hidden;
-            box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.5);
-            border: 3px solid rgba(255, 230, 150, 0.8);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            border: 2px solid #ffffff;
             background: #0a0a0a;
             aspect-ratio: 16 / 9;
             z-index: 9999;
@@ -67,8 +64,8 @@
         }
 
         .video-wrapper:hover {
-            transform: scale(1.03);
-            box-shadow: 0 20px 50px -8px rgba(0, 0, 0, 0.6);
+            transform: scale(1.02);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
         }
 
         .video-wrapper video {
@@ -95,75 +92,52 @@
             display: block;
         }
 
-        /* ===== LABEL VIDEO ===== */
+        /* ===== LABEL VIDEO MINIMALIS ===== */
         .video-label {
             position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(8px);
+            bottom: 8px;
+            left: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
             color: #fff;
-            padding: 3px 12px;
-            border-radius: 30px;
-            font-size: 0.6rem;
-            font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.5rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
             z-index: 2;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             pointer-events: none;
         }
 
         .video-label i {
-            color: #ffd700;
+            color: #f5c542;
+            font-size: 0.5rem;
         }
 
-        .hd-badge {
+        .cam-status {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(8px);
+            top: 8px;
+            left: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
             color: #fff;
             padding: 2px 10px;
-            border-radius: 30px;
-            font-size: 0.55rem;
-            font-weight: 700;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            pointer-events: none;
-        }
-
-        .hd-badge i {
-            color: #ffd700;
-        }
-
-        .camera-status {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            color: #fff;
-            padding: 3px 10px;
-            border-radius: 30px;
-            font-size: 0.5rem;
-            font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.45rem;
+            font-weight: 500;
             z-index: 3;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             pointer-events: none;
         }
 
-        .camera-status .dot {
-            width: 6px;
-            height: 6px;
+        .cam-status .dot {
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             display: inline-block;
             animation: pulse-dot 1.5s ease-in-out infinite;
@@ -173,71 +147,82 @@
             background: #4caf50;
         }
         .dot.inactive {
-            background: #f44336;
+            background: #ef5350;
             animation: none;
+        }
+
+        .hd-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.45rem;
+            font-weight: 600;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .hd-badge i {
+            color: #f5c542;
         }
 
         .facemesh-badge {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
             color: #fff;
             padding: 2px 10px;
-            border-radius: 30px;
-            font-size: 0.5rem;
-            font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.45rem;
+            font-weight: 500;
             z-index: 3;
-            display: flex;
-            align-items: center;
-            gap: 6px;
             pointer-events: none;
         }
 
         .facemesh-badge i {
-            color: #ffd700;
+            color: #f5c542;
         }
 
         /* ===== EKSPRESI BADGE ===== */
         .expression-badge {
             position: absolute;
-            bottom: 50px;
-            left: 10px;
-            background: rgba(0, 0, 0, 0.8);
+            bottom: 40px;
+            left: 8px;
+            background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(8px);
             color: #fff;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 0.55rem;
+            font-weight: 500;
             z-index: 3;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 2px;
+            gap: 1px;
             pointer-events: none;
-            min-width: 100px;
+            min-width: 80px;
         }
 
         .expression-badge .expr-label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.55rem;
-            color: #aaa;
+            font-size: 0.45rem;
+            color: #999;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .expression-badge .expr-value {
-            font-size: 0.9rem;
-            font-weight: 700;
+            font-size: 0.75rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .expr-happy i {
@@ -261,17 +246,16 @@
 
         .expr-details {
             display: flex;
-            gap: 8px;
-            font-size: 0.5rem;
-            color: #888;
-            margin-top: 2px;
-            flex-wrap: wrap;
+            gap: 6px;
+            font-size: 0.45rem;
+            color: #777;
+            margin-top: 1px;
         }
 
         .expr-details span {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
 
         @keyframes pulse-dot {
@@ -286,16 +270,16 @@
             }
         }
 
-        /* ===== KONTROL KAMERA DI BAWAH VIDEO ===== */
+        /* ===== KONTROL KAMERA ===== */
         .camera-controls {
             position: fixed;
-            top: calc(20px + 320px * 9 / 16 + 10px);
+            top: calc(20px + 280px * 9 / 16 + 10px);
             right: 20px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             z-index: 9999;
-            width: 320px;
+            width: 280px;
         }
 
         .cam-btn {
@@ -303,338 +287,290 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 0.5rem 1.5rem;
-            border-radius: 60px;
-            border: 1px solid rgba(255, 215, 150, 0.4);
-            font-family: 'Quicksand', sans-serif;
+            padding: 0.45rem 1.2rem;
+            border-radius: 40px;
+            border: none;
+            font-family: 'Inter', sans-serif;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             width: 100%;
-            backdrop-filter: blur(8px);
+            background: #ffffff;
+            color: #1a1a1a;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         }
 
         .cam-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         }
 
         .cam-btn.start {
-            background: linear-gradient(135deg, #f9d56e, #f0b830);
-            color: #3d2a0e;
-            border-color: #f0b830;
-            box-shadow: 0 8px 20px -8px rgba(240, 184, 48, 0.4);
+            background: #f5c542;
+            color: #1a1a1a;
         }
 
         .cam-btn.start:hover:not(:disabled) {
-            background: linear-gradient(135deg, #fce083, #f5c542);
-            box-shadow: 0 8px 25px -8px rgba(240, 184, 48, 0.6);
+            background: #f0b830;
         }
 
         .cam-btn.stop {
-            background: linear-gradient(135deg, #ef5350, #c62828);
+            background: #ef5350;
             color: #fff;
-            border-color: #ef5350;
-            box-shadow: 0 8px 20px -8px rgba(239, 83, 80, 0.4);
         }
 
         .cam-btn.stop:hover:not(:disabled) {
-            background: linear-gradient(135deg, #e57373, #d32f2f);
-            box-shadow: 0 8px 25px -8px rgba(239, 83, 80, 0.6);
+            background: #d32f2f;
         }
 
         .cam-btn:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
             transform: none !important;
         }
 
         .cam-btn i {
-            font-size: 1rem;
-        }
-
-        .cam-btn.start i {
-            color: #3d2a0e;
-        }
-        .cam-btn.stop i {
-            color: #fff;
+            font-size: 0.85rem;
         }
 
         /* ===== AVATAR ===== */
         .avatar {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(145deg, #f7d97e, #e8b84a);
+            width: 96px;
+            height: 96px;
+            background: linear-gradient(145deg, #f5c542, #e8b830);
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
-            color: #4d350f;
-            box-shadow: 0 20px 30px -8px rgba(200, 160, 50, 0.5);
-            border: 4px solid rgba(255, 240, 180, 0.9);
-            margin-bottom: 0.4rem;
-            transition: transform 0.25s ease;
+            font-size: 3rem;
+            color: #1a1a1a;
+            box-shadow: 0 12px 24px rgba(245, 197, 66, 0.25);
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s ease;
         }
 
         .avatar:hover {
-            transform: scale(1.02) rotate(-3deg);
+            transform: scale(1.04);
         }
 
-        .wave-icon {
-            display: inline-block;
-            font-size: 1.9rem;
-            margin-left: 0.2rem;
-            animation: wave 2.6s infinite ease-in-out;
-            transform-origin: 70% 70%;
-        }
-
-        @keyframes wave {
-            0% {
-                transform: rotate(0deg);
-            }
-            20% {
-                transform: rotate(16deg);
-            }
-            40% {
-                transform: rotate(-6deg);
-            }
-            60% {
-                transform: rotate(12deg);
-            }
-            80% {
-                transform: rotate(-4deg);
-            }
-            100% {
-                transform: rotate(0deg);
-            }
-        }
-
+        /* ===== TYPOGRAPHY SIMPLE ===== */
         h1 {
-            font-size: 3.2rem;
-            font-weight: 700;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #1a1a1a;
             letter-spacing: -0.5px;
-            color: #3b2a10;
-            margin: 0.1rem 0 0.1rem;
-            line-height: 1.1;
-        }
-
-        h1 .highlight {
-            background: linear-gradient(135deg, #d4a02a, #b87c1e);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
+            line-height: 1.2;
+            margin: 0.2rem 0 0.1rem;
         }
 
         .badge-profesi {
             display: inline-block;
-            background: rgba(200, 160, 50, 0.2);
-            backdrop-filter: blur(4px);
-            padding: 0.5rem 2rem;
-            border-radius: 60px;
-            border: 1px solid rgba(200, 160, 50, 0.35);
-            margin: 0.2rem 0 1rem;
-            font-size: 1.3rem;
+            background: #f5f0e8;
+            padding: 0.35rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.95rem;
             font-weight: 600;
-            color: #4d350f;
+            color: #4a3a2a;
+            margin: 0.2rem 0 0.8rem;
         }
 
         .badge-profesi i {
-            margin-right: 12px;
-            color: #b87c2e;
+            margin-right: 8px;
+            color: #f5c542;
         }
 
         .divider {
-            width: 90px;
-            height: 4px;
-            background: linear-gradient(90deg, #e8c86a, #d4a02a);
-            border-radius: 8px;
-            margin: 0.6rem auto 1.4rem;
-            opacity: 0.6;
+            width: 48px;
+            height: 3px;
+            background: #f5c542;
+            border-radius: 4px;
+            margin: 0.4rem auto 1.2rem;
         }
 
         .bio {
-            font-size: 1.05rem;
-            line-height: 1.7;
-            color: #4d3a1a;
-            max-width: 480px;
-            margin: 0 auto 1.8rem;
-            background: rgba(255, 240, 180, 0.4);
-            padding: 1rem 1.8rem;
-            border-radius: 40px;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 215, 150, 0.35);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #555;
+            max-width: 440px;
+            margin: 0 auto 1.4rem;
+            padding: 0 0.5rem;
         }
 
         .bio i {
-            color: #b87c2e;
-            margin: 0 4px;
+            color: #f5c542;
         }
 
+        /* ===== FEATURE GRID SIMPLE ===== */
         .feature-grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 0.8rem 1.6rem;
-            margin: 1.6rem 0 1.8rem;
+            gap: 0.5rem 1rem;
+            margin: 1.2rem 0 1.6rem;
         }
 
         .feature-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: rgba(255, 242, 200, 0.6);
-            backdrop-filter: blur(4px);
-            padding: 0.4rem 1.4rem 0.4rem 1rem;
-            border-radius: 60px;
-            border: 1px solid rgba(255, 215, 150, 0.45);
+            gap: 8px;
+            background: #f8f5f0;
+            padding: 0.3rem 1.2rem 0.3rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
             font-weight: 500;
-            color: #4d3a1a;
+            color: #3a3a3a;
             transition: all 0.2s ease;
         }
 
         .feature-item i {
-            font-size: 1.2rem;
-            color: #b87c2e;
-            width: 1.6rem;
+            font-size: 1rem;
+            color: #f5c542;
+            width: 1.4rem;
             text-align: center;
         }
 
         .feature-item:hover {
-            background: rgba(255, 235, 170, 0.8);
-            transform: translateY(-3px);
-            border-color: #d4a02a;
+            background: #f0ebe0;
+            transform: translateY(-2px);
         }
 
-        .ig-button {
+        /* ===== TOMBOL SOSIAL ===== */
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 0.3rem;
+        }
+
+        .social-btn {
             display: inline-flex;
             align-items: center;
-            gap: 14px;
-            background: linear-gradient(135deg, #f5d06a, #dba52a);
-            border: none;
-            padding: 0.8rem 2.6rem;
-            border-radius: 60px;
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: #3d2a0e;
-            box-shadow: 0 14px 28px -10px rgba(200, 160, 50, 0.5);
-            transition: all 0.25s ease;
-            border: 1px solid rgba(255, 235, 180, 0.4);
-            text-decoration: none;
-            letter-spacing: 0.3px;
-            margin-top: 0.2rem;
-            cursor: pointer;
-        }
-
-        .ig-button i {
-            font-size: 1.5rem;
-            transition: transform 0.25s ease;
-            color: #3d2a0e;
-        }
-
-        .ig-button:hover {
-            transform: scale(1.03) translateY(-2px);
-            box-shadow: 0 20px 34px -12px #c49a2a;
-            background: linear-gradient(135deg, #fade7a, #e8b830);
-        }
-
-        .linkedin-btn {
-            background: linear-gradient(135deg, #6e9ec4, #2d6a9f);
-            color: #fff;
-            border-color: #4a7fa7;
-        }
-        .linkedin-btn i {
-            color: #fff;
-        }
-        .linkedin-btn:hover {
-            background: linear-gradient(135deg, #7fb0d6, #3a7bb5);
-            box-shadow: 0 20px 34px -12px #2d6a9f;
-        }
-
-        .footnote {
-            margin-top: 2.4rem;
+            gap: 10px;
+            padding: 0.6rem 1.8rem;
+            border-radius: 40px;
             font-size: 0.9rem;
-            color: #89704a;
-            border-top: 1px solid rgba(200, 165, 100, 0.3);
-            padding-top: 1.6rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid #e8e0d6;
+            color: #1a1a1a;
+            background: #ffffff;
+        }
+
+        .social-btn i {
+            font-size: 1.2rem;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            border-color: #f5c542;
+        }
+
+        .social-btn.instagram {
+            background: linear-gradient(135deg, #f5c542, #e8b830);
+            border-color: #f5c542;
+            color: #1a1a1a;
+        }
+
+        .social-btn.instagram:hover {
+            background: linear-gradient(135deg, #f5d06a, #f0b830);
+        }
+
+        .social-btn.linkedin {
+            background: #0a66c2;
+            border-color: #0a66c2;
+            color: #fff;
+        }
+
+        .social-btn.linkedin:hover {
+            background: #0a5db0;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 1.8rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid #f0ebe0;
             display: flex;
             justify-content: center;
-            gap: 1.8rem;
+            gap: 1.2rem;
             flex-wrap: wrap;
         }
 
-        .footnote span {
-            display: inline-flex;
+        .footer span {
+            font-size: 0.75rem;
+            color: #999;
+            display: flex;
             align-items: center;
             gap: 6px;
-            background: rgba(255, 235, 180, 0.3);
-            padding: 0.2rem 1.2rem;
-            border-radius: 40px;
         }
 
-        .footnote i {
-            color: #b87c2e;
+        .footer i {
+            color: #f5c542;
+            font-size: 0.7rem;
         }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .video-wrapper {
-                width: 200px;
-                top: 10px;
-                right: 10px;
+                width: 180px;
+                top: 12px;
+                right: 12px;
                 border-radius: 14px;
+                border-width: 2px;
             }
 
             .camera-controls {
-                top: calc(10px + 200px * 9 / 16 + 8px);
-                right: 10px;
-                width: 200px;
+                top: calc(12px + 180px * 9 / 16 + 8px);
+                right: 12px;
+                width: 180px;
             }
 
             .cam-btn {
-                font-size: 0.7rem;
-                padding: 0.4rem 1rem;
+                font-size: 0.65rem;
+                padding: 0.35rem 0.8rem;
             }
 
             .card {
-                padding: 1.2rem 1rem 2rem;
-                border-radius: 32px;
+                padding: 1.8rem 1.2rem 1.8rem;
+                border-radius: 24px;
             }
 
             h1 {
-                font-size: 2.2rem;
+                font-size: 1.8rem;
             }
             .badge-profesi {
-                font-size: 1rem;
-                padding: 0.4rem 1.2rem;
+                font-size: 0.8rem;
+                padding: 0.25rem 1.2rem;
             }
             .bio {
-                font-size: 0.9rem;
-                padding: 0.8rem 1.2rem;
+                font-size: 0.85rem;
             }
             .avatar {
-                width: 80px;
-                height: 80px;
-                font-size: 2.8rem;
+                width: 72px;
+                height: 72px;
+                font-size: 2.2rem;
             }
-            .ig-button {
-                padding: 0.5rem 1.5rem;
-                font-size: 0.9rem;
+            .social-btn {
+                padding: 0.4rem 1.2rem;
+                font-size: 0.8rem;
             }
             .expression-badge {
                 display: none;
             }
-            .camera-status {
+            .cam-status {
                 font-size: 0.4rem;
                 padding: 2px 8px;
             }
             .hd-badge {
-                font-size: 0.45rem;
+                font-size: 0.4rem;
                 padding: 2px 8px;
             }
             .video-label {
-                font-size: 0.5rem;
+                font-size: 0.4rem;
                 padding: 2px 8px;
             }
             .facemesh-badge {
@@ -645,34 +581,61 @@
 
         @media (max-width: 480px) {
             .video-wrapper {
-                width: 150px;
+                width: 130px;
                 top: 8px;
                 right: 8px;
                 border-radius: 10px;
-                border-width: 2px;
             }
 
             .camera-controls {
-                top: calc(8px + 150px * 9 / 16 + 6px);
+                top: calc(8px + 130px * 9 / 16 + 6px);
                 right: 8px;
-                width: 150px;
+                width: 130px;
             }
 
             .cam-btn {
-                font-size: 0.6rem;
-                padding: 0.3rem 0.8rem;
+                font-size: 0.55rem;
+                padding: 0.25rem 0.6rem;
                 gap: 4px;
             }
 
+            .card {
+                padding: 1.2rem 0.8rem 1.2rem;
+                border-radius: 20px;
+            }
+
             h1 {
-                font-size: 1.8rem;
+                font-size: 1.4rem;
             }
             .badge-profesi {
-                font-size: 0.85rem;
+                font-size: 0.7rem;
+                padding: 0.2rem 1rem;
+            }
+            .bio {
+                font-size: 0.75rem;
+            }
+            .avatar {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+            .feature-item {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.8rem 0.2rem 0.6rem;
+            }
+            .social-btn {
                 padding: 0.3rem 1rem;
+                font-size: 0.7rem;
+                gap: 6px;
+            }
+            .social-btn i {
+                font-size: 1rem;
             }
             .expression-badge {
                 display: none;
+            }
+            .footer span {
+                font-size: 0.6rem;
             }
         }
     </style>
@@ -686,13 +649,13 @@
             <canvas id="facemeshCanvas"></canvas>
         </div>
 
-        <div class="hd-badge">
-            <i class="fas fa-star"></i> HD
-        </div>
-
-        <div class="camera-status" id="cameraStatus">
+        <div class="cam-status" id="cameraStatus">
             <span class="dot inactive" id="statusDot"></span>
             <span id="statusText">Offline</span>
+        </div>
+
+        <div class="hd-badge">
+            <i class="fas fa-star"></i> HD
         </div>
 
         <div class="video-label">
@@ -717,10 +680,10 @@
         </div>
     </div>
 
-    <!-- ===== KONTROL KAMERA DI BAWAH VIDEO ===== -->
+    <!-- ===== KONTROL KAMERA ===== -->
     <div class="camera-controls">
         <button class="cam-btn start" id="startBtn">
-            <i class="fas fa-play"></i> Mulai Kamera
+            <i class="fas fa-play"></i> Mulai
         </button>
         <button class="cam-btn stop" id="stopBtn" disabled>
             <i class="fas fa-stop"></i> Hentikan
@@ -735,10 +698,7 @@
         </div>
 
         <!-- NAMA -->
-        <h1>
-            <span class="highlight">Adventia Putri Pradita</span>
-            <span class="wave-icon">👩‍🏫</span>
-        </h1>
+        <h1>Adventia Putri Pradita</h1>
 
         <!-- PROFESI -->
         <div class="badge-profesi">
@@ -749,11 +709,10 @@
 
         <!-- BIO -->
         <div class="bio">
-            <i class="fas fa-quote-left" style="opacity:0.5; margin-right: 6px;"></i>
+            <i class="fas fa-quote-left" style="opacity:0.4; margin-right: 4px;"></i>
             Mengajar fisika dengan hati, membimbing generasi cerdas
-            <i class="fas fa-heart" style="color:#d4a02a;"></i>
-            <i class="fas fa-atom"></i> dan penuh rasa ingin tahu.
-            <i class="fas fa-quote-right" style="opacity:0.5; margin-left: 6px;"></i>
+            <i class="fas fa-heart"></i> dan penuh rasa ingin tahu.
+            <i class="fas fa-quote-right" style="opacity:0.4; margin-left: 4px;"></i>
         </div>
 
         <!-- FEATURE GRID -->
@@ -764,24 +723,21 @@
             <div class="feature-item"><i class="fas fa-seedling"></i> Tumbuh</div>
         </div>
 
-        <!-- TOMBOL SOSIAL -->
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 0.5rem;">
-            <a href="https://instagram.com/advdita" target="_blank" class="ig-button">
+        <!-- SOSIAL -->
+        <div class="social-links">
+            <a href="https://instagram.com/advdita" target="_blank" class="social-btn instagram">
                 <i class="fab fa-instagram"></i> @advdita
-                <i class="fas fa-arrow-right" style="font-size:1rem; opacity:0.8;"></i>
             </a>
-            <a href="https://www.linkedin.com/in/adventia-putri-pradita-7b496b14b/" target="_blank" class="ig-button linkedin-btn">
+            <a href="https://www.linkedin.com/in/adventia-putri-pradita-7b496b14b/" target="_blank" class="social-btn linkedin">
                 <i class="fab fa-linkedin-in"></i> LinkedIn
-                <i class="fas fa-arrow-right" style="font-size:1rem; opacity:0.8;"></i>
             </a>
         </div>
 
         <!-- FOOTER -->
-        <div class="footnote">
-            <span><i class="fas fa-calendar-check"></i> #FisikaSeru</span>
-            <span><i class="fas fa-hashtag"></i> #GuruSantaUrsula</span>
+        <div class="footer">
+            <span><i class="fas fa-hashtag"></i> FisikaSeru</span>
+            <span><i class="fas fa-hashtag"></i> GuruSantaUrsula</span>
             <span><i class="fas fa-mug-hot"></i> setiap hari</span>
-            <span><i class="fas fa-hdmi"></i> HD</span>
         </div>
     </div>
 
@@ -829,9 +785,9 @@
 
                 setTimeout(() => startFaceMesh(), 500);
 
-                console.log('📷 Kamera berhasil diaktifkan');
+                console.log('📷 Kamera aktif');
             } catch (err) {
-                console.error('❌ Gagal mengakses kamera:', err);
+                console.error('❌ Gagal akses kamera:', err);
                 alert('Tidak dapat mengakses kamera. Pastikan Anda telah mengizinkan akses kamera.');
                 updateStatus(false);
                 startBtn.disabled = false;
@@ -855,7 +811,7 @@
         stopBtn.addEventListener('click', stopCamera);
 
         // ============================================================
-        // FACEMESH - TANPA GAMBAR TITIK-TITIK
+        // FACEMESH - TANPA OVERLAY VISUAL
         // ============================================================
         const canvas = document.getElementById('facemeshCanvas');
         const canvasCtx = canvas.getContext('2d');
@@ -1018,9 +974,9 @@
             const blinkText = isBlinking ? 'Tertutup' : 'Terbuka';
             const mouthText = isMouthOpen ? 'Terbuka' : 'Tertutup';
             blinkStatus.innerHTML = `<i class="fas fa-eye"></i> ${blinkText}`;
-            blinkStatus.style.color = isBlinking ? '#ffd700' : '#888';
+            blinkStatus.style.color = isBlinking ? '#f5c542' : '#888';
             mouthStatus.innerHTML = `<i class="fas fa-mouth"></i> ${mouthText}`;
-            mouthStatus.style.color = isMouthOpen ? '#ffd700' : '#888';
+            mouthStatus.style.color = isMouthOpen ? '#f5c542' : '#888';
         }
 
         function startFaceMesh() {
@@ -1048,12 +1004,10 @@
                     canvas.height = rect.height;
                 }
 
-                // Kosongkan canvas - TIDAK MENGGAMBAR APA PUN
                 canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
                 if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
                     const landmarks = results.multiFaceLandmarks[0];
-                    // Hanya deteksi ekspresi tanpa menggambar titik
                     detectExpression(landmarks);
                 }
             });
