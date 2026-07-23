@@ -32,10 +32,11 @@
             background: radial-gradient(circle at 20% 30%, #fff9e6, #fdecc8);
             font-family: 'Quicksand', sans-serif;
             padding: 1.5rem;
+            position: relative;
         }
 
         .card {
-            max-width: 900px;
+            max-width: 800px;
             width: 100%;
             background: rgba(255, 248, 230, 0.85);
             backdrop-filter: blur(14px);
@@ -46,18 +47,28 @@
                 inset 0 1px 3px rgba(255, 245, 200, 0.8);
             border: 1px solid rgba(255, 230, 150, 0.6);
             text-align: center;
+            position: relative;
         }
 
+        /* ===== VIDEO STREAM - POJOK KANAN ATAS ===== */
         .video-wrapper {
-            width: 100%;
-            border-radius: 32px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 320px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 16px 32px -12px rgba(160, 120, 30, 0.35);
-            border: 2px solid rgba(255, 230, 150, 0.6);
+            box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.5);
+            border: 3px solid rgba(255, 230, 150, 0.8);
             background: #0a0a0a;
             aspect-ratio: 16 / 9;
-            position: relative;
-            margin-bottom: 1rem;
+            z-index: 9999;
+            transition: all 0.3s ease;
+        }
+
+        .video-wrapper:hover {
+            transform: scale(1.03);
+            box-shadow: 0 20px 50px -8px rgba(0, 0, 0, 0.6);
         }
 
         .video-wrapper video {
@@ -84,16 +95,17 @@
             display: block;
         }
 
+        /* ===== LABEL VIDEO ===== */
         .video-label {
             position: absolute;
-            bottom: 12px;
-            left: 12px;
+            bottom: 10px;
+            left: 10px;
             background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(8px);
             color: #fff;
-            padding: 4px 14px;
+            padding: 3px 12px;
             border-radius: 30px;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             font-weight: 600;
             border: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 2;
@@ -109,14 +121,14 @@
 
         .hd-badge {
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: 10px;
+            right: 10px;
             background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(8px);
             color: #fff;
-            padding: 3px 12px;
+            padding: 2px 10px;
             border-radius: 30px;
-            font-size: 0.65rem;
+            font-size: 0.55rem;
             font-weight: 700;
             border: 1px solid rgba(255, 255, 255, 0.15);
             z-index: 2;
@@ -132,14 +144,14 @@
 
         .camera-status {
             position: absolute;
-            top: 12px;
-            left: 12px;
+            top: 10px;
+            left: 10px;
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(8px);
             color: #fff;
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 30px;
-            font-size: 0.6rem;
+            font-size: 0.5rem;
             font-weight: 600;
             border: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 3;
@@ -150,8 +162,8 @@
         }
 
         .camera-status .dot {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             display: inline-block;
             animation: pulse-dot 1.5s ease-in-out infinite;
@@ -167,14 +179,14 @@
 
         .facemesh-badge {
             position: absolute;
-            bottom: 12px;
-            right: 12px;
+            bottom: 10px;
+            right: 10px;
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(8px);
             color: #fff;
-            padding: 3px 12px;
+            padding: 2px 10px;
             border-radius: 30px;
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             font-weight: 600;
             border: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 3;
@@ -188,43 +200,44 @@
             color: #ffd700;
         }
 
+        /* ===== EKSPRESI BADGE ===== */
         .expression-badge {
             position: absolute;
-            top: 55px;
-            left: 12px;
+            bottom: 50px;
+            left: 10px;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(8px);
             color: #fff;
-            padding: 8px 16px;
-            border-radius: 16px;
-            font-size: 0.8rem;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.65rem;
             font-weight: 600;
             border: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 3;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 4px;
+            gap: 2px;
             pointer-events: none;
-            min-width: 120px;
+            min-width: 100px;
         }
 
         .expression-badge .expr-label {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.7rem;
+            gap: 6px;
+            font-size: 0.55rem;
             color: #aaa;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .expression-badge .expr-value {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .expr-happy i {
@@ -248,8 +261,8 @@
 
         .expr-details {
             display: flex;
-            gap: 12px;
-            font-size: 0.6rem;
+            gap: 8px;
+            font-size: 0.5rem;
             color: #888;
             margin-top: 2px;
             flex-wrap: wrap;
@@ -273,6 +286,7 @@
             }
         }
 
+        /* ===== KONTROL KAMERA ===== */
         .camera-controls {
             display: flex;
             justify-content: center;
@@ -379,7 +393,7 @@
         }
 
         h1 {
-            font-size: 3.6rem;
+            font-size: 3.2rem;
             font-weight: 700;
             letter-spacing: -0.5px;
             color: #3b2a10;
@@ -403,7 +417,7 @@
             border-radius: 60px;
             border: 1px solid rgba(200, 160, 50, 0.35);
             margin: 0.2rem 0 1rem;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 600;
             color: #4d350f;
         }
@@ -423,7 +437,7 @@
         }
 
         .bio {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             line-height: 1.7;
             color: #4d3a1a;
             max-width: 480px;
@@ -545,102 +559,125 @@
             color: #b87c2e;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            .video-wrapper {
+                width: 200px;
+                top: 10px;
+                right: 10px;
+                border-radius: 14px;
+            }
+
             .card {
                 padding: 1.2rem 1rem 2rem;
                 border-radius: 32px;
             }
-            h1 {
-                font-size: 2.6rem;
-            }
-            .badge-profesi {
-                font-size: 1.1rem;
-                padding: 0.4rem 1.4rem;
-            }
-            .bio {
-                font-size: 0.95rem;
-                padding: 0.8rem 1.2rem;
-            }
-            .avatar {
-                width: 90px;
-                height: 90px;
-                font-size: 3rem;
-            }
-            .ig-button {
-                padding: 0.6rem 1.8rem;
-                font-size: 0.95rem;
-            }
-            .expression-badge {
-                top: 50px;
-                left: 10px;
-                padding: 6px 12px;
-                font-size: 0.7rem;
-                min-width: 100px;
-            }
-        }
 
-        @media (max-width: 480px) {
             h1 {
                 font-size: 2.2rem;
             }
             .badge-profesi {
-                font-size: 0.95rem;
+                font-size: 1rem;
+                padding: 0.4rem 1.2rem;
+            }
+            .bio {
+                font-size: 0.9rem;
+                padding: 0.8rem 1.2rem;
+            }
+            .avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 2.8rem;
+            }
+            .ig-button {
+                padding: 0.5rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            .expression-badge {
+                display: none;
+            }
+            .camera-status {
+                font-size: 0.4rem;
+                padding: 2px 8px;
+            }
+            .hd-badge {
+                font-size: 0.45rem;
+                padding: 2px 8px;
+            }
+            .video-label {
+                font-size: 0.5rem;
+                padding: 2px 8px;
+            }
+            .facemesh-badge {
+                font-size: 0.4rem;
+                padding: 2px 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .video-wrapper {
+                width: 150px;
+                top: 8px;
+                right: 8px;
+                border-radius: 10px;
+                border-width: 2px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+            .badge-profesi {
+                font-size: 0.85rem;
                 padding: 0.3rem 1rem;
             }
             .expression-badge {
-                top: 45px;
-                left: 8px;
-                padding: 4px 10px;
-                font-size: 0.6rem;
-                min-width: 80px;
-            }
-            .expression-badge .expr-value {
-                font-size: 0.8rem;
+                display: none;
             }
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <!-- VIDEO WEBCAM -->
-        <div class="video-wrapper">
-            <video id="webcam" autoplay playsinline muted></video>
+    <!-- ===== VIDEO STREAM - POJOK KANAN ATAS ===== -->
+    <div class="video-wrapper" id="videoWrapper">
+        <video id="webcam" autoplay playsinline muted></video>
 
-            <div class="facemesh-container" id="facemeshContainer">
-                <canvas id="facemeshCanvas"></canvas>
-            </div>
-
-            <div class="hd-badge">
-                <i class="fas fa-star"></i> HD
-            </div>
-
-            <div class="camera-status" id="cameraStatus">
-                <span class="dot inactive" id="statusDot"></span>
-                <span id="statusText">Offline</span>
-            </div>
-
-            <div class="video-label">
-                <i class="fas fa-camera"></i> Webcam PC
-            </div>
-
-            <div class="facemesh-badge">
-                <i class="fas fa-eye"></i> FaceMesh
-            </div>
-
-            <div class="expression-badge" id="expressionBadge">
-                <div class="expr-label">
-                    <i class="fas fa-smile"></i> EKSPRESI
-                </div>
-                <div class="expr-value expr-neutral" id="exprValue">
-                    <i class="fas fa-meh"></i> Netral
-                </div>
-                <div class="expr-details" id="exprDetails">
-                    <span id="blinkStatus"><i class="fas fa-eye"></i> Mata: Terbuka</span>
-                    <span id="mouthStatus"><i class="fas fa-mouth"></i> Mulut: Tertutup</span>
-                </div>
-            </div>
+        <div class="facemesh-container" id="facemeshContainer">
+            <canvas id="facemeshCanvas"></canvas>
         </div>
 
+        <div class="hd-badge">
+            <i class="fas fa-star"></i> HD
+        </div>
+
+        <div class="camera-status" id="cameraStatus">
+            <span class="dot inactive" id="statusDot"></span>
+            <span id="statusText">Offline</span>
+        </div>
+
+        <div class="video-label">
+            <i class="fas fa-camera"></i> Webcam
+        </div>
+
+        <div class="facemesh-badge">
+            <i class="fas fa-eye"></i> FaceMesh
+        </div>
+
+        <div class="expression-badge" id="expressionBadge">
+            <div class="expr-label">
+                <i class="fas fa-smile"></i> EKSPRESI
+            </div>
+            <div class="expr-value expr-neutral" id="exprValue">
+                <i class="fas fa-meh"></i> Netral
+            </div>
+            <div class="expr-details" id="exprDetails">
+                <span id="blinkStatus"><i class="fas fa-eye"></i> Terbuka</span>
+                <span id="mouthStatus"><i class="fas fa-mouth"></i> Tertutup</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== KONTEN UTAMA ===== -->
+    <div class="card">
         <!-- KONTROL KAMERA -->
         <div class="camera-controls">
             <button class="cam-btn start" id="startBtn">
@@ -736,8 +773,8 @@
             try {
                 stream = await navigator.mediaDevices.getUserMedia({
                     video: {
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 },
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
                         facingMode: 'user'
                     },
                     audio: false
@@ -749,7 +786,6 @@
                 startBtn.disabled = true;
                 stopBtn.disabled = false;
 
-                // Mulai FaceMesh setelah kamera aktif
                 setTimeout(() => startFaceMesh(), 500);
 
                 console.log('📷 Kamera berhasil diaktifkan');
@@ -938,8 +974,8 @@
             exprValue.className = `expr-value ${exprInfo.class}`;
             exprValue.innerHTML = `<i class="fas ${exprInfo.icon}"></i> ${exprInfo.name}`;
 
-            const blinkText = isBlinking ? 'Mata: Tertutup' : 'Mata: Terbuka';
-            const mouthText = isMouthOpen ? 'Mulut: Terbuka' : 'Mulut: Tertutup';
+            const blinkText = isBlinking ? 'Tertutup' : 'Terbuka';
+            const mouthText = isMouthOpen ? 'Terbuka' : 'Tertutup';
             blinkStatus.innerHTML = `<i class="fas fa-eye"></i> ${blinkText}`;
             blinkStatus.style.color = isBlinking ? '#ffd700' : '#888';
             mouthStatus.innerHTML = `<i class="fas fa-mouth"></i> ${mouthText}`;
@@ -977,7 +1013,6 @@
                     const landmarks = results.multiFaceLandmarks[0];
                     detectExpression(landmarks);
 
-                    // Gambar landmark
                     for (const landmark of landmarks) {
                         const x = landmark.x * canvas.width;
                         const y = landmark.y * canvas.height;
@@ -987,7 +1022,6 @@
                         canvasCtx.fill();
                     }
 
-                    // Gambar koneksi
                     const connections = [
                         [1, 33],
                         [1, 133],
@@ -1076,7 +1110,6 @@
             console.log('⏹️ FaceMesh stopped');
         }
 
-        // Cek dukungan kamera
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
             alert('Browser Anda tidak mendukung akses kamera.');
             startBtn.disabled = true;
