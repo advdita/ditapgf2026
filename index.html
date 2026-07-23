@@ -81,6 +81,11 @@
       animation: pulse-dot 1.5s infinite;
     }
 
+    .webcam-label .dot.off {
+      background: #ff4444;
+      animation: none;
+    }
+
     @keyframes pulse-dot {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.3; transform: scale(0.8); }
@@ -117,6 +122,70 @@
       transform: rotate(90deg);
     }
 
+    /* kontrol webcam - di dalam video */
+    .webcam-controls {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      padding: 6px 12px;
+      border-radius: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .webcam-wrapper:hover .webcam-controls {
+      opacity: 1;
+    }
+
+    .webcam-controls .ctrl-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e0d0f0;
+      padding: 5px 12px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 0.7rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .webcam-controls .ctrl-btn:hover {
+      background: rgba(180, 140, 220, 0.3);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+
+    .webcam-controls .ctrl-btn.active {
+      background: rgba(120, 80, 200, 0.4);
+      border-color: rgba(180, 140, 220, 0.4);
+    }
+
+    .webcam-controls .ctrl-btn.off-btn {
+      background: rgba(200, 60, 60, 0.3);
+      border-color: rgba(255, 80, 80, 0.2);
+    }
+
+    .webcam-controls .ctrl-btn.off-btn:hover {
+      background: rgba(200, 60, 60, 0.5);
+      border-color: rgba(255, 80, 80, 0.4);
+    }
+
+    .webcam-controls .ctrl-btn .icon {
+      font-size: 0.9rem;
+    }
+
     /* konten webcam */
     .webcam-content {
       width: 100%;
@@ -137,7 +206,41 @@
       border: none;
       outline: none;
       display: block;
-      transform: scaleX(-1); /* mirror effect seperti cermin */
+    }
+
+    .webcam-content video.mirror {
+      transform: scaleX(-1);
+    }
+
+    .webcam-content video.normal {
+      transform: scaleX(1);
+    }
+
+    /* overlay saat kamera mati */
+    .camera-off-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0a0a0a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      gap: 8px;
+      z-index: 5;
+    }
+
+    .camera-off-overlay .big-icon {
+      font-size: 3rem;
+      opacity: 0.5;
+    }
+    .camera-off-overlay .label {
+      font-size: 0.8rem;
+      font-weight: 400;
+      opacity: 0.5;
     }
 
     /* fallback message */
@@ -457,6 +560,19 @@
       .webcam-content {
         min-height: 140px;
       }
+      .webcam-controls {
+        bottom: 8px;
+        padding: 4px 10px;
+        gap: 5px;
+        opacity: 1;
+      }
+      .webcam-controls .ctrl-btn {
+        font-size: 0.6rem;
+        padding: 3px 8px;
+      }
+      .webcam-controls .ctrl-btn .icon {
+        font-size: 0.7rem;
+      }
       .fallback-content .icon {
         font-size: 2rem;
       }
@@ -470,6 +586,12 @@
         font-size: 0.7rem;
         padding: 0.3rem 0.9rem;
       }
+      .camera-off-overlay .big-icon {
+        font-size: 2rem;
+      }
+      .camera-off-overlay .label {
+        font-size: 0.6rem;
+      }
     }
 
     @media (max-width: 420px) {
@@ -482,6 +604,18 @@
       }
       .webcam-content {
         min-height: 110px;
+      }
+      .webcam-controls {
+        bottom: 5px;
+        padding: 3px 6px;
+        gap: 3px;
+      }
+      .webcam-controls .ctrl-btn {
+        font-size: 0.5rem;
+        padding: 2px 6px;
+      }
+      .webcam-controls .ctrl-btn .icon {
+        font-size: 0.6rem;
       }
       .fallback-content {
         min-height: 110px;
@@ -508,12 +642,22 @@
   <!-- ====== WEBCAM STREAM ====== -->
   <div class="webcam-wrapper" id="webcamWrapper">
     <div class="webcam-label">
-      <span class="dot"></span> WEBCAM
+      <span class="dot" id="statusDot"></span> <span id="statusText">WEBCAM</span>
     </div>
     <div class="webcam-close" id="closeWebcamBtn" title="Tutup webcam">✕</div>
 
     <div class="webcam-content" id="webcamContent">
       <!-- Konten akan diisi oleh JavaScript -->
+    </div>
+
+    <!-- Kontrol webcam -->
+    <div class="webcam-controls" id="webcamControls">
+      <button class="ctrl-btn active" id="flipBtn" title="Flip/Mirror">
+        <span class="icon">🔄</span> Flip
+      </button>
+      <button class="ctrl-btn off-btn" id="powerBtn" title="Matikan/Hidupkan Kamera">
+        <span class="icon">⏻</span> <span id="powerLabel">Matikan</span>
+      </button>
     </div>
   </div>
 
@@ -581,18 +725,28 @@
       const wrapper = document.getElementById('webcamWrapper');
       const closeBtn = document.getElementById('closeWebcamBtn');
       const webcamContent = document.getElementById('webcamContent');
+      const flipBtn = document.getElementById('flipBtn');
+      const powerBtn = document.getElementById('powerBtn');
+      const powerLabel = document.getElementById('powerLabel');
+      const statusDot = document.getElementById('statusDot');
+      const statusText = document.getElementById('statusText');
       
       let stream = null;
       let videoElement = null;
+      let isMirror = true;
+      let isCameraOn = true;
+      let isStreamActive = false;
 
-      // Fungsi untuk menutup webcam
-      function closeWebcam() {
-        if (stream) {
-          stream.getTracks().forEach(track => track.stop());
-          stream = null;
-        }
-        if (wrapper) {
-          wrapper.style.display = 'none';
+      // Fungsi untuk update status UI
+      function updateStatus(active) {
+        if (active) {
+          statusDot.className = 'dot';
+          statusText.textContent = 'WEBCAM';
+          powerLabel.textContent = 'Matikan';
+        } else {
+          statusDot.className = 'dot off';
+          statusText.textContent = 'MATI';
+          powerLabel.textContent = 'Hidupkan';
         }
       }
 
@@ -613,10 +767,96 @@
         return div;
       }
 
+      // Fungsi untuk menampilkan overlay "Kamera Mati"
+      function showCameraOff() {
+        // Hapus semua konten kecuali overlay
+        const existingOverlay = webcamContent.querySelector('.camera-off-overlay');
+        if (existingOverlay) return;
+
+        // Sembunyikan video jika ada
+        if (videoElement) {
+          videoElement.style.display = 'none';
+        }
+
+        const overlay = document.createElement('div');
+        overlay.className = 'camera-off-overlay';
+        overlay.id = 'cameraOffOverlay';
+        overlay.innerHTML = `
+          <div class="big-icon">📷</div>
+          <div class="label">Kamera dimatikan</div>
+          <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 4px;">Klik tombol "Hidupkan" untuk mengaktifkan</div>
+        `;
+        webcamContent.appendChild(overlay);
+        updateStatus(false);
+        isCameraOn = false;
+      }
+
+      // Fungsi untuk menghilangkan overlay "Kamera Mati"
+      function hideCameraOff() {
+        const overlay = document.getElementById('cameraOffOverlay');
+        if (overlay) {
+          overlay.remove();
+        }
+        if (videoElement) {
+          videoElement.style.display = 'block';
+        }
+        updateStatus(true);
+        isCameraOn = true;
+      }
+
+      // Fungsi untuk menutup webcam (full close)
+      function closeWebcam() {
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
+          stream = null;
+        }
+        isStreamActive = false;
+        if (wrapper) {
+          wrapper.style.display = 'none';
+        }
+      }
+
+      // Fungsi untuk matikan/hidupkan kamera (tanpa menutup stream)
+      function toggleCamera() {
+        if (!stream) return;
+
+        if (isCameraOn) {
+          // Matikan kamera
+          stream.getTracks().forEach(track => {
+            track.enabled = false;
+          });
+          showCameraOff();
+          isCameraOn = false;
+          powerLabel.textContent = 'Hidupkan';
+        } else {
+          // Hidupkan kamera
+          stream.getTracks().forEach(track => {
+            track.enabled = true;
+          });
+          hideCameraOff();
+          isCameraOn = true;
+          powerLabel.textContent = 'Matikan';
+        }
+      }
+
+      // Fungsi untuk toggle flip/mirror
+      function toggleFlip() {
+        if (!videoElement) return;
+        isMirror = !isMirror;
+        if (isMirror) {
+          videoElement.className = 'mirror';
+          flipBtn.classList.add('active');
+        } else {
+          videoElement.className = 'normal';
+          flipBtn.classList.remove('active');
+        }
+      }
+
       // Fungsi untuk memulai webcam
       function startWebcam() {
         // Bersihkan konten
         webcamContent.innerHTML = '';
+        isCameraOn = true;
 
         // Cek dukungan browser
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -655,6 +895,7 @@
         })
         .then(function(mediaStream) {
           stream = mediaStream;
+          isStreamActive = true;
 
           // Hapus loading
           webcamContent.innerHTML = '';
@@ -668,11 +909,16 @@
           video.style.width = '100%';
           video.style.height = '100%';
           video.style.objectFit = 'cover';
-          video.style.transform = 'scaleX(-1)'; // mirror effect
+          video.className = 'mirror'; // default mirror
           videoElement = video;
 
           // Tambahkan ke konten
           webcamContent.appendChild(video);
+
+          // Update status
+          updateStatus(true);
+          isCameraOn = true;
+          powerLabel.textContent = 'Matikan';
 
           // Play video
           video.play().catch(function(e) {
@@ -726,6 +972,22 @@
         closeBtn.addEventListener('click', function(e) {
           e.stopPropagation();
           closeWebcam();
+        });
+      }
+
+      // Event listener tombol flip
+      if (flipBtn) {
+        flipBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          toggleFlip();
+        });
+      }
+
+      // Event listener tombol power
+      if (powerBtn) {
+        powerBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          toggleCamera();
         });
       }
 
