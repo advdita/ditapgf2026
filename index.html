@@ -63,17 +63,48 @@
     /* fallback jika video tidak bisa dimuat */
     .video-stream-wrapper .fallback-msg {
       display: none;
-      padding: 1.2rem 0.8rem;
+      padding: 1.5rem 1rem;
       color: #f0e6ff;
       font-size: 0.85rem;
       text-align: center;
       background: #1a0e2a;
-      line-height: 1.6;
+      line-height: 1.8;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
-    .video-stream-wrapper video:not(:valid) ~ .fallback-msg,
-    .video-stream-wrapper video:not([src]) ~ .fallback-msg {
-      display: block;
+    .video-stream-wrapper .fallback-msg .error-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .video-stream-wrapper .fallback-msg .error-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+    }
+    .video-stream-wrapper .fallback-msg .error-detail {
+      font-size: 0.75rem;
+      opacity: 0.7;
+      max-width: 90%;
+    }
+    .video-stream-wrapper .fallback-msg .retry-btn {
+      margin-top: 0.8rem;
+      background: rgba(180, 140, 220, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #e0d0f0;
+      padding: 0.4rem 1.2rem;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .video-stream-wrapper .fallback-msg .retry-btn:hover {
+      background: rgba(180, 140, 220, 0.5);
+      border-color: rgba(255, 255, 255, 0.4);
     }
 
     /* label kecil di atas video */
@@ -148,7 +179,7 @@
 
     @keyframes pulse-dot {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+      50% { opacity: 0.4; }
     }
 
     /* ====== CARD UTAMA ====== */
@@ -424,25 +455,30 @@
     <div class="stream-close" id="closeStreamBtn" title="Tutup stream">✕</div>
     <div class="live-indicator">● LIVE</div>
 
-    <!-- Menggunakan tag video untuk stream MJPEG/RTSP/HTTP -->
+    <!-- Menggunakan tag video dengan pendekatan yang lebih aman -->
     <video 
       id="streamVideo"
       autoplay 
       muted 
       playsinline 
       loop
-      src="http://10.101.209.90"
-      onerror="this.style.display='none'; document.querySelector('.fallback-msg').style.display='block';"
-    >
-      <!-- fallback jika browser tidak support video -->
-      <p class="fallback-msg">⚠️ Stream tidak tersedia<br><span style="font-size:0.7rem;">http://10.101.209.90</span></p>
-    </video>
+      style="display:none;"
+    ></video>
 
-    <!-- fallback message (terlihat jika video gagal) -->
-    <div class="fallback-msg" style="display:none;">
-      ⚠️ Stream tidak dapat dimuat<br>
-      <span style="font-size:0.7rem; opacity:0.7;">http://10.101.209.90</span>
-      <br><span style="font-size:0.6rem; opacity:0.5;">Pastikan alamat dapat diakses</span>
+    <!-- Fallback message dengan penjelasan dan tombol retry -->
+    <div class="fallback-msg" id="fallbackMessage">
+      <div class="error-icon">🔒</div>
+      <div class="error-title">Stream tidak dapat diakses</div>
+      <div class="error-detail">
+        Karena halaman ini diakses melalui HTTPS,<br>
+        browser memblokir konten HTTP dari alamat lokal.<br>
+        <span style="font-size:0.7rem; opacity:0.6;">http://10.101.209.90</span>
+      </div>
+      <div style="margin-top:0.5rem; font-size:0.7rem; opacity:0.5;">
+        Coba akses halaman ini melalui HTTP<br>
+        atau gunakan VPN/Proxy yang mendukung.
+      </div>
+      <button class="retry-btn" id="retryBtn">🔄 Coba Lagi</button>
     </div>
   </div>
 
@@ -512,24 +548,83 @@
     </div>
   </div>
 
-  <!-- ====== SCRIPT UNTUK CLOSE STREAM & RELOAD ====== -->
+  <!-- ====== SCRIPT ====== -->
   <script>
     (function() {
       const wrapper = document.getElementById('videoStreamWrapper');
       const closeBtn = document.getElementById('closeStreamBtn');
       const video = document.getElementById('streamVideo');
+      const fallback = document.getElementById('fallbackMessage');
+      const retryBtn = document.getElementById('retryBtn');
+      const STREAM_URL = 'http://10.101.209.90';
 
-      // Fungsi untuk menutup / menyembunyikan stream
+      // Fungsi untuk menutup stream
       function closeStream() {
         if (wrapper) {
-          // Hentikan video agar tidak terus berjalan di background
           if (video) {
             video.pause();
-            video.src = ''; // kosongkan src agar benar-benar berhenti
+            video.src = '';
             video.load();
           }
           wrapper.style.display = 'none';
         }
+      }
+
+      // Fungsi untuk mencoba memuat stream
+      function tryLoadStream() {
+        if (!video) return;
+        
+        // Reset state
+        video.style.display = 'block';
+        fallback.style.display = 'none';
+        
+        // Coba load dengan berbagai pendekatan
+        try {
+          // Pendekatan 1: Langsung set src
+          video.src = STREAM_URL;
+          video.load();
+          
+          // Coba play
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(function(e) {
+              console.log('Play error:', e);
+              showFallback('🔒', 'Autoplay diblokir', 
+                'Browser memblokir pemutaran otomatis.<br>Klik tombol di bawah untuk mencoba lagi.',
+                true);
+            });
+          }
+        } catch (e) {
+          console.error('Error loading stream:', e);
+          showFallback('⚠️', 'Gagal memuat stream', 
+            'Terjadi kesalahan saat mencoba mengakses stream.<br>Pastikan alamat dapat diakses.',
+            true);
+        }
+
+        // Timeout: jika setelah 5 detik video tidak loaded, tampilkan fallback
+        setTimeout(function() {
+          if (video.readyState === 0 || video.networkState === 2) {
+            showFallback('⏱️', 'Timeout', 
+              'Stream tidak merespons dalam waktu yang ditentukan.<br>Periksa koneksi atau alamat stream.',
+              true);
+          }
+        }, 5000);
+      }
+
+      // Fungsi untuk menampilkan fallback dengan pesan custom
+      function showFallback(icon, title, detail, showRetry = true) {
+        video.style.display = 'none';
+        fallback.style.display = 'flex';
+        
+        const iconEl = fallback.querySelector('.error-icon');
+        const titleEl = fallback.querySelector('.error-title');
+        const detailEl = fallback.querySelector('.error-detail');
+        const retryEl = fallback.querySelector('.retry-btn');
+        
+        if (iconEl) iconEl.textContent = icon || '🔒';
+        if (titleEl) titleEl.textContent = title || 'Stream tidak tersedia';
+        if (detailEl) detailEl.innerHTML = detail || 'Konten tidak dapat diakses.';
+        if (retryEl) retryEl.style.display = showRetry ? 'inline-block' : 'none';
       }
 
       // Event listener tombol close
@@ -540,50 +635,81 @@
         });
       }
 
-      // Jika video gagal dimuat, tampilkan fallback
-      if (video) {
-        video.addEventListener('error', function() {
-          const fallback = wrapper.querySelector('.fallback-msg');
-          if (fallback) {
-            fallback.style.display = 'block';
-          }
-          video.style.display = 'none';
-          
-          // Coba reload stream setelah 5 detik (jika gagal karena koneksi)
-          setTimeout(function() {
-            if (wrapper.style.display !== 'none') {
-              video.style.display = 'block';
-              video.src = 'http://10.101.209.90';
-              video.load();
-              video.play().catch(function() {
-                // Jika masih gagal, tampilkan fallback lagi
-                const fallback2 = wrapper.querySelector('.fallback-msg');
-                if (fallback2) {
-                  fallback2.style.display = 'block';
-                }
-                video.style.display = 'none';
-              });
-            }
-          }, 5000);
-        });
-
-        // Jika video berhasil dimuat, pastikan fallback tersembunyi
-        video.addEventListener('loadeddata', function() {
-          const fallback = wrapper.querySelector('.fallback-msg');
-          if (fallback) {
-            fallback.style.display = 'none';
-          }
-          video.style.display = 'block';
-        });
-
-        // Coba play otomatis dengan penanganan error
-        video.play().catch(function(e) {
-          // Autoplay mungkin diblokir, tapi tidak masalah karena user bisa interaksi
-          console.log('Autoplay diblokir, stream tetap tersedia.');
+      // Event listener tombol retry
+      if (retryBtn) {
+        retryBtn.addEventListener('click', function() {
+          tryLoadStream();
         });
       }
 
-      // Opsional: klik di luar video tidak menutup (hanya tombol close)
+      // Deteksi apakah halaman diakses via HTTPS
+      if (window.location.protocol === 'https:') {
+        // Tampilkan pesan khusus untuk HTTPS dengan penjelasan
+        showFallback(
+          '🔒', 
+          'Mixed Content di Blokir',
+          'Halaman ini diakses melalui <strong>HTTPS</strong>, tetapi stream menggunakan <strong>HTTP</strong>.<br>' +
+          'Browser memblokir konten campuran untuk keamanan.<br><br>' +
+          '<span style="font-size:0.75rem; opacity:0.7;">Solusi: Akses halaman melalui HTTP, atau gunakan proxy/HTTPS untuk stream.</span>',
+          true
+        );
+        
+        // Tetap coba load dengan cara alternatif (mungkin berhasil di beberapa browser)
+        setTimeout(function() {
+          // Coba dengan iframe sebagai alternatif (beberapa browser lebih longgar)
+          try {
+            const iframe = document.createElement('iframe');
+            iframe.src = STREAM_URL;
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.aspectRatio = '16/9';
+            iframe.style.border = 'none';
+            iframe.style.background = '#0a0a0a';
+            
+            // Ganti video dengan iframe
+            const parent = video.parentNode;
+            if (parent) {
+              video.style.display = 'none';
+              parent.insertBefore(iframe, video);
+              
+              // Jika iframe gagal, tetap tampilkan fallback
+              iframe.onerror = function() {
+                parent.removeChild(iframe);
+                showFallback('🔒', 'Mixed Content di Blokir', 
+                  'Stream tidak dapat diakses melalui HTTPS.<br>Gunakan browser dengan pengaturan keamanan yang lebih longgar.',
+                  true);
+              };
+            }
+          } catch (e) {
+            // Tetap di fallback
+          }
+        }, 1000);
+      } else {
+        // Jika HTTP, coba load normal
+        tryLoadStream();
+      }
+
+      // Event listener untuk error pada video
+      if (video) {
+        video.addEventListener('error', function(e) {
+          console.log('Video error:', e);
+          // Cek apakah ini error karena CORS atau Mixed Content
+          if (video.error) {
+            let msg = 'Gagal memuat stream.';
+            if (video.error.code === 4) {
+              msg = 'Stream tidak ditemukan atau alamat salah.';
+            }
+            showFallback('⚠️', 'Error', msg, true);
+          }
+        });
+
+        // Jika berhasil dimuat
+        video.addEventListener('loadeddata', function() {
+          fallback.style.display = 'none';
+          video.style.display = 'block';
+        });
+      }
+
     })();
   </script>
 
