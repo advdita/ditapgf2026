@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Perkenalan · Adventia Putri Pradita</title>
+  <!-- Font & gaya dasar -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
@@ -210,7 +211,14 @@
       outline: none;
       display: block;
       background: #0a0a0a;
+    }
+
+    .webcam-content video.mirror {
       transform: scaleX(-1);
+    }
+
+    .webcam-content video.normal {
+      transform: scaleX(1);
     }
 
     /* Canvas untuk FaceMesh */
@@ -653,7 +661,7 @@
     <div class="webcam-close" id="closeWebcamBtn" title="Tutup webcam">✕</div>
 
     <div class="webcam-content" id="webcamContent">
-      <video id="webcamVideo" autoplay playsinline></video>
+      <video id="webcamVideo" class="mirror" autoplay playsinline></video>
       <canvas id="faceMeshCanvas"></canvas>
     </div>
 
@@ -661,6 +669,9 @@
     <div class="webcam-controls" id="webcamControls">
       <button class="ctrl-btn active" id="faceMeshBtn" title="FaceMesh Detection">
         <span class="icon">👤</span> FaceMesh
+      </button>
+      <button class="ctrl-btn active" id="flipBtn" title="Flip/Mirror">
+        <span class="icon">🔄</span> Flip
       </button>
       <button class="ctrl-btn off-btn" id="powerBtn" title="Matikan/Hidupkan Kamera">
         <span class="icon">⏻</span> <span id="powerLabel">Matikan</span>
@@ -726,7 +737,7 @@
     </div>
   </div>
 
-  <!-- ====== SCRIPT ====== -->
+  <!-- ====== SCRIPT UNTUK WEBCAM + FACEMESH ====== -->
   <script>
     (function() {
       const video = document.getElementById('webcamVideo');
@@ -735,6 +746,7 @@
       const webcamContent = document.getElementById('webcamContent');
       const wrapper = document.getElementById('webcamWrapper');
       const closeBtn = document.getElementById('closeWebcamBtn');
+      const flipBtn = document.getElementById('flipBtn');
       const powerBtn = document.getElementById('powerBtn');
       const powerLabel = document.getElementById('powerLabel');
       const statusDot = document.getElementById('statusDot');
@@ -742,11 +754,11 @@
       const faceMeshBtn = document.getElementById('faceMeshBtn');
 
       let stream = null;
+      let isMirror = true;
       let isCameraOn = true;
       let isFaceMeshEnabled = true;
       let faceMesh = null;
       let isFaceMeshLoaded = false;
-      let animationFrameId = null;
 
       // ====== FUNGSI UTILITY ======
       function updateStatus(active) {
@@ -921,22 +933,6 @@
         }
       }
 
-      function closeWebcam() {
-        if (stream) {
-          stream.getTracks().forEach(track => track.stop());
-          stream = null;
-        }
-        if (animationFrameId) {
-          cancelAnimationFrame(animationFrameId);
-          animationFrameId = null;
-        }
-        if (wrapper) wrapper.style.display = 'none';
-      }
-
-      // ====== INISIALISASI ======
-      async function startWebcam() {
-        webcamContent.innerHTML = '';
-        // Kembalikan video dan canvas
-        const newVideo = document.createElement('video');
-        newVideo.id = 'webcamVideo';
-       
+      function toggleFlip() {
+        isMirror = !isMirror;
+        video.className = isMirror ? 'mirror' : '
