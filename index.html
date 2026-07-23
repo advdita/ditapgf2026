@@ -855,7 +855,7 @@
         stopBtn.addEventListener('click', stopCamera);
 
         // ============================================================
-        // FACEMESH
+        // FACEMESH - TANPA GAMBAR TITIK-TITIK
         // ============================================================
         const canvas = document.getElementById('facemeshCanvas');
         const canvasCtx = canvas.getContext('2d');
@@ -1048,72 +1048,13 @@
                     canvas.height = rect.height;
                 }
 
+                // Kosongkan canvas - TIDAK MENGGAMBAR APA PUN
                 canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
                 if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
                     const landmarks = results.multiFaceLandmarks[0];
+                    // Hanya deteksi ekspresi tanpa menggambar titik
                     detectExpression(landmarks);
-
-                    for (const landmark of landmarks) {
-                        const x = landmark.x * canvas.width;
-                        const y = landmark.y * canvas.height;
-                        canvasCtx.beginPath();
-                        canvasCtx.arc(x, y, 2, 0, 2 * Math.PI);
-                        canvasCtx.fillStyle = 'rgba(255, 215, 0, 0.8)';
-                        canvasCtx.fill();
-                    }
-
-                    const connections = [
-                        [1, 33],
-                        [1, 133],
-                        [1, 362],
-                        [1, 263],
-                        [33, 133],
-                        [362, 263],
-                        [61, 146],
-                        [146, 91],
-                        [91, 181],
-                        [181, 84],
-                        [84, 17],
-                        [17, 314],
-                        [314, 405],
-                        [405, 321],
-                        [321, 375],
-                        [375, 291],
-                        [291, 308],
-                        [308, 324],
-                        [324, 318],
-                        [318, 402],
-                        [402, 317],
-                        [317, 14],
-                        [14, 87],
-                        [87, 178],
-                        [178, 88],
-                        [88, 95],
-                        [95, 78],
-                        [78, 61],
-                        [46, 53],
-                        [53, 52],
-                        [52, 65],
-                        [65, 55],
-                        [276, 283],
-                        [283, 282],
-                        [282, 295],
-                        [295, 285]
-                    ];
-
-                    for (const [i, j] of connections) {
-                        if (i < landmarks.length && j < landmarks.length) {
-                            const p1 = landmarks[i];
-                            const p2 = landmarks[j];
-                            canvasCtx.beginPath();
-                            canvasCtx.moveTo(p1.x * canvas.width, p1.y * canvas.height);
-                            canvasCtx.lineTo(p2.x * canvas.width, p2.y * canvas.height);
-                            canvasCtx.strokeStyle = 'rgba(255, 215, 0, 0.2)';
-                            canvasCtx.lineWidth = 1.5;
-                            canvasCtx.stroke();
-                        }
-                    }
                 }
             });
 
