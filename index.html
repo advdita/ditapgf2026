@@ -983,4 +983,104 @@
                         const y = landmark.y * canvas.height;
                         canvasCtx.beginPath();
                         canvasCtx.arc(x, y, 2, 0, 2 * Math.PI);
-                        canvasCtx.fillStyle = 'rgba(255, 
+                        canvasCtx.fillStyle = 'rgba(255, 215, 0, 0.8)';
+                        canvasCtx.fill();
+                    }
+
+                    // Gambar koneksi
+                    const connections = [
+                        [1, 33],
+                        [1, 133],
+                        [1, 362],
+                        [1, 263],
+                        [33, 133],
+                        [362, 263],
+                        [61, 146],
+                        [146, 91],
+                        [91, 181],
+                        [181, 84],
+                        [84, 17],
+                        [17, 314],
+                        [314, 405],
+                        [405, 321],
+                        [321, 375],
+                        [375, 291],
+                        [291, 308],
+                        [308, 324],
+                        [324, 318],
+                        [318, 402],
+                        [402, 317],
+                        [317, 14],
+                        [14, 87],
+                        [87, 178],
+                        [178, 88],
+                        [88, 95],
+                        [95, 78],
+                        [78, 61],
+                        [46, 53],
+                        [53, 52],
+                        [52, 65],
+                        [65, 55],
+                        [276, 283],
+                        [283, 282],
+                        [282, 295],
+                        [295, 285]
+                    ];
+
+                    for (const [i, j] of connections) {
+                        if (i < landmarks.length && j < landmarks.length) {
+                            const p1 = landmarks[i];
+                            const p2 = landmarks[j];
+                            canvasCtx.beginPath();
+                            canvasCtx.moveTo(p1.x * canvas.width, p1.y * canvas.height);
+                            canvasCtx.lineTo(p2.x * canvas.width, p2.y * canvas.height);
+                            canvasCtx.strokeStyle = 'rgba(255, 215, 0, 0.2)';
+                            canvasCtx.lineWidth = 1.5;
+                            canvasCtx.stroke();
+                        }
+                    }
+                }
+            });
+
+            cameraHelper = new Camera(video, {
+                onFrame: async () => {
+                    try {
+                        await faceMesh.send({ image: video });
+                    } catch (err) {
+                        // silent
+                    }
+                },
+                width: 640,
+                height: 480
+            });
+
+            cameraHelper.start().then(() => {
+                facemeshRunning = true;
+                console.log('✅ FaceMesh started');
+            }).catch(err => {
+                console.error('❌ FaceMesh error:', err);
+            });
+        }
+
+        function stopFaceMesh() {
+            if (cameraHelper) {
+                cameraHelper.stop();
+                cameraHelper = null;
+            }
+            if (faceMesh) {
+                faceMesh.close();
+                faceMesh = null;
+            }
+            facemeshRunning = false;
+            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+            console.log('⏹️ FaceMesh stopped');
+        }
+
+        // Cek dukungan kamera
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            alert('Browser Anda tidak mendukung akses kamera.');
+            startBtn.disabled = true;
+        }
+    </script>
+</body>
+</html>
