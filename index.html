@@ -286,34 +286,36 @@
             }
         }
 
-        /* ===== KONTROL KAMERA ===== */
+        /* ===== KONTROL KAMERA DI BAWAH VIDEO ===== */
         .camera-controls {
+            position: fixed;
+            top: calc(20px + 320px * 9 / 16 + 10px);
+            right: 20px;
             display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin: 0.8rem 0 1.2rem;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 9999;
+            width: 320px;
         }
 
         .cam-btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            padding: 0.5rem 1.8rem;
+            padding: 0.5rem 1.5rem;
             border-radius: 60px;
             border: 1px solid rgba(255, 215, 150, 0.4);
-            background: rgba(255, 242, 210, 0.7);
-            backdrop-filter: blur(4px);
             font-family: 'Quicksand', sans-serif;
             font-weight: 600;
-            font-size: 0.9rem;
-            color: #5a3e1a;
+            font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.25s ease;
+            width: 100%;
+            backdrop-filter: blur(8px);
         }
 
         .cam-btn:hover:not(:disabled) {
-            background: rgba(255, 235, 180, 0.9);
             transform: translateY(-2px);
         }
 
@@ -321,20 +323,24 @@
             background: linear-gradient(135deg, #f9d56e, #f0b830);
             color: #3d2a0e;
             border-color: #f0b830;
+            box-shadow: 0 8px 20px -8px rgba(240, 184, 48, 0.4);
         }
 
         .cam-btn.start:hover:not(:disabled) {
             background: linear-gradient(135deg, #fce083, #f5c542);
+            box-shadow: 0 8px 25px -8px rgba(240, 184, 48, 0.6);
         }
 
         .cam-btn.stop {
             background: linear-gradient(135deg, #ef5350, #c62828);
             color: #fff;
             border-color: #ef5350;
+            box-shadow: 0 8px 20px -8px rgba(239, 83, 80, 0.4);
         }
 
         .cam-btn.stop:hover:not(:disabled) {
             background: linear-gradient(135deg, #e57373, #d32f2f);
+            box-shadow: 0 8px 25px -8px rgba(239, 83, 80, 0.6);
         }
 
         .cam-btn:disabled {
@@ -343,6 +349,18 @@
             transform: none !important;
         }
 
+        .cam-btn i {
+            font-size: 1rem;
+        }
+
+        .cam-btn.start i {
+            color: #3d2a0e;
+        }
+        .cam-btn.stop i {
+            color: #fff;
+        }
+
+        /* ===== AVATAR ===== */
         .avatar {
             width: 120px;
             height: 120px;
@@ -568,6 +586,17 @@
                 border-radius: 14px;
             }
 
+            .camera-controls {
+                top: calc(10px + 200px * 9 / 16 + 8px);
+                right: 10px;
+                width: 200px;
+            }
+
+            .cam-btn {
+                font-size: 0.7rem;
+                padding: 0.4rem 1rem;
+            }
+
             .card {
                 padding: 1.2rem 1rem 2rem;
                 border-radius: 32px;
@@ -623,6 +652,18 @@
                 border-width: 2px;
             }
 
+            .camera-controls {
+                top: calc(8px + 150px * 9 / 16 + 6px);
+                right: 8px;
+                width: 150px;
+            }
+
+            .cam-btn {
+                font-size: 0.6rem;
+                padding: 0.3rem 0.8rem;
+                gap: 4px;
+            }
+
             h1 {
                 font-size: 1.8rem;
             }
@@ -676,18 +717,18 @@
         </div>
     </div>
 
+    <!-- ===== KONTROL KAMERA DI BAWAH VIDEO ===== -->
+    <div class="camera-controls">
+        <button class="cam-btn start" id="startBtn">
+            <i class="fas fa-play"></i> Mulai Kamera
+        </button>
+        <button class="cam-btn stop" id="stopBtn" disabled>
+            <i class="fas fa-stop"></i> Hentikan
+        </button>
+    </div>
+
     <!-- ===== KONTEN UTAMA ===== -->
     <div class="card">
-        <!-- KONTROL KAMERA -->
-        <div class="camera-controls">
-            <button class="cam-btn start" id="startBtn">
-                <i class="fas fa-play"></i> Mulai Kamera
-            </button>
-            <button class="cam-btn stop" id="stopBtn" disabled>
-                <i class="fas fa-stop"></i> Hentikan
-            </button>
-        </div>
-
         <!-- AVATAR -->
         <div class="avatar">
             <i class="fas fa-chalkboard-teacher"></i>
@@ -725,8 +766,8 @@
 
         <!-- TOMBOL SOSIAL -->
         <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 0.5rem;">
-            <a href="https://instagram.com/aprfkalista" target="_blank" class="ig-button">
-                <i class="fab fa-instagram"></i> @aprfkalista
+            <a href="https://instagram.com/advdita" target="_blank" class="ig-button">
+                <i class="fab fa-instagram"></i> @advdita
                 <i class="fas fa-arrow-right" style="font-size:1rem; opacity:0.8;"></i>
             </a>
             <a href="https://www.linkedin.com/in/adventia-putri-pradita-7b496b14b/" target="_blank" class="ig-button linkedin-btn">
