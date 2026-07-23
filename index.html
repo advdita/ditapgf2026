@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Perkenalan · Adventia Putri Pradita</title>
-  <!-- Font & gaya dasar -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
@@ -33,10 +32,10 @@
       right: 20px;
       width: 340px;
       max-width: 38vw;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.85);
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
       border: 2px solid rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(8px);
       z-index: 999;
@@ -46,16 +45,15 @@
 
     .webcam-wrapper:hover {
       border-color: rgba(180, 140, 220, 0.6);
-      box-shadow: 0 16px 48px rgba(80, 40, 120, 0.35);
+      box-shadow: 0 16px 48px rgba(80, 40, 120, 0.4);
       transform: scale(1.02);
     }
 
-    /* label di atas webcam */
     .webcam-label {
       position: absolute;
       top: 10px;
       left: 14px;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.8);
       backdrop-filter: blur(4px);
       color: #ddd0f0;
       font-size: 0.7rem;
@@ -91,12 +89,11 @@
       50% { opacity: 0.3; transform: scale(0.8); }
     }
 
-    /* tombol close */
     .webcam-close {
       position: absolute;
       top: 8px;
       right: 12px;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(4px);
       color: #d4c0ee;
       border: 1px solid rgba(255, 255, 255, 0.15);
@@ -122,7 +119,6 @@
       transform: rotate(90deg);
     }
 
-    /* kontrol webcam - di dalam video */
     .webcam-controls {
       position: absolute;
       bottom: 12px;
@@ -131,7 +127,7 @@
       display: flex;
       gap: 8px;
       z-index: 10;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(8px);
       padding: 6px 12px;
       border-radius: 40px;
@@ -189,14 +185,13 @@
     }
 
     .webcam-controls .ctrl-btn .badge {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.15);
       padding: 0 6px;
       border-radius: 10px;
       font-size: 0.6rem;
       margin-left: 2px;
     }
 
-    /* konten webcam */
     .webcam-content {
       width: 100%;
       aspect-ratio: 16 / 9;
@@ -216,6 +211,7 @@
       border: none;
       outline: none;
       display: block;
+      background: #0a0a0a;
     }
 
     .webcam-content video.mirror {
@@ -226,7 +222,6 @@
       transform: scaleX(1);
     }
 
-    /* overlay saat kamera mati */
     .camera-off-overlay {
       position: absolute;
       top: 0;
@@ -253,7 +248,6 @@
       opacity: 0.5;
     }
 
-    /* fallback message */
     .fallback-content {
       display: flex;
       flex-direction: column;
@@ -673,7 +667,7 @@
       <button class="ctrl-btn" id="switchCameraBtn" title="Ganti Kamera Depan/Belakang">
         <span class="icon">📱</span> Ganti <span class="badge" id="cameraLabel">Depan</span>
       </button>
-      <button class="ctrl-btn active" id="mirrorBtn" title="Flip/Mirror">
+      <button class="ctrl-btn active" id="mirrorBtn" title="Mirror">
         <span class="icon">🔄</span> Mirror
       </button>
       <button class="ctrl-btn off-btn" id="powerBtn" title="Matikan/Hidupkan Kamera">
@@ -759,10 +753,9 @@
       let isMirror = true;
       let isCameraOn = true;
       let isStreamActive = false;
-      let currentFacingMode = 'user'; // 'user' = depan, 'environment' = belakang
+      let currentFacingMode = 'user';
       let isSwitching = false;
 
-      // Fungsi untuk update status UI
       function updateStatus(active) {
         if (active) {
           statusDot.className = 'dot';
@@ -775,16 +768,10 @@
         }
       }
 
-      // Fungsi untuk update label kamera
       function updateCameraLabel() {
-        if (currentFacingMode === 'user') {
-          cameraLabel.textContent = 'Depan';
-        } else {
-          cameraLabel.textContent = 'Belakang';
-        }
+        cameraLabel.textContent = currentFacingMode === 'user' ? 'Depan' : 'Belakang';
       }
 
-      // Fungsi untuk membuat fallback
       function createFallback(icon, title, detail, showButtons = true) {
         const div = document.createElement('div');
         div.className = 'fallback-content';
@@ -801,95 +788,69 @@
         return div;
       }
 
-      // Fungsi untuk menampilkan overlay "Kamera Mati"
       function showCameraOff() {
         const existingOverlay = webcamContent.querySelector('.camera-off-overlay');
         if (existingOverlay) return;
-
-        if (videoElement) {
-          videoElement.style.display = 'none';
-        }
-
+        if (videoElement) videoElement.style.display = 'none';
         const overlay = document.createElement('div');
         overlay.className = 'camera-off-overlay';
         overlay.id = 'cameraOffOverlay';
         overlay.innerHTML = `
           <div class="big-icon">📷</div>
           <div class="label">Kamera dimatikan</div>
-          <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 4px;">Klik tombol "Hidupkan" untuk mengaktifkan</div>
+          <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 4px;">Klik "Hidupkan" untuk mengaktifkan</div>
         `;
         webcamContent.appendChild(overlay);
         updateStatus(false);
         isCameraOn = false;
       }
 
-      // Fungsi untuk menghilangkan overlay "Kamera Mati"
       function hideCameraOff() {
         const overlay = document.getElementById('cameraOffOverlay');
-        if (overlay) {
-          overlay.remove();
-        }
-        if (videoElement) {
-          videoElement.style.display = 'block';
-        }
+        if (overlay) overlay.remove();
+        if (videoElement) videoElement.style.display = 'block';
         updateStatus(true);
         isCameraOn = true;
       }
 
-      // Fungsi untuk menutup webcam (full close)
       function closeWebcam() {
         if (stream) {
           stream.getTracks().forEach(track => track.stop());
           stream = null;
         }
         isStreamActive = false;
-        if (wrapper) {
-          wrapper.style.display = 'none';
-        }
+        if (wrapper) wrapper.style.display = 'none';
       }
 
-      // Fungsi untuk matikan/hidupkan kamera (tanpa menutup stream)
       function toggleCamera() {
         if (!stream) return;
-
         if (isCameraOn) {
-          stream.getTracks().forEach(track => {
-            track.enabled = false;
-          });
+          stream.getTracks().forEach(track => track.enabled = false);
           showCameraOff();
-          isCameraOn = false;
-          powerLabel.textContent = 'Hidupkan';
         } else {
-          stream.getTracks().forEach(track => {
-            track.enabled = true;
-          });
+          stream.getTracks().forEach(track => track.enabled = true);
           hideCameraOff();
-          isCameraOn = true;
-          powerLabel.textContent = 'Matikan';
         }
       }
 
-      // Fungsi untuk toggle mirror
       function toggleMirror() {
         if (!videoElement) return;
         isMirror = !isMirror;
-        if (isMirror) {
-          videoElement.className = 'mirror';
-          mirrorBtn.classList.add('active');
-        } else {
-          videoElement.className = 'normal';
-          mirrorBtn.classList.remove('active');
-        }
+        videoElement.className = isMirror ? 'mirror' : 'normal';
+        mirrorBtn.classList.toggle('active');
       }
 
-      // Fungsi untuk mengganti kamera depan/belakang
       async function switchCamera() {
         if (isSwitching || !stream) return;
         isSwitching = true;
         switchCameraBtn.disabled = true;
         switchCameraBtn.style.opacity = '0.5';
 
-        // Matikan kamera saat ini
+        // Simpan state mirror
+        const currentMirror = isMirror;
+        const currentPowerState = isCameraOn;
+
+        // Matikan stream lama
         if (stream) {
           stream.getTracks().forEach(track => track.stop());
           stream = null;
@@ -901,24 +862,24 @@
         updateCameraLabel();
 
         try {
-          // Minta akses dengan facing mode baru
-          const newStream = await navigator.mediaDevices.getUserMedia({
+          const constraints = {
             video: {
               facingMode: currentFacingMode,
               width: { ideal: 640 },
               height: { ideal: 480 }
             },
             audio: false
-          });
+          };
 
+          const newStream = await navigator.mediaDevices.getUserMedia(constraints);
           stream = newStream;
           isStreamActive = true;
           isCameraOn = true;
 
-          // Hapus semua konten di webcamContent
+          // Hapus semua konten
           webcamContent.innerHTML = '';
 
-          // Buat elemen video baru
+          // Buat video baru
           const video = document.createElement('video');
           video.srcObject = newStream;
           video.autoplay = true;
@@ -927,27 +888,28 @@
           video.style.width = '100%';
           video.style.height = '100%';
           video.style.objectFit = 'cover';
-          video.className = isMirror ? 'mirror' : 'normal';
+          video.className = currentMirror ? 'mirror' : 'normal';
           videoElement = video;
-
           webcamContent.appendChild(video);
+
+          // Play
+          await video.play();
 
           // Update status
           updateStatus(true);
           powerLabel.textContent = 'Matikan';
 
-          // Play video
-          await video.play();
-
-          // Jika sebelumnya kamera mati, pastikan overlay hilang
-          hideCameraOff();
+          // Jika sebelumnya mati, matikan lagi
+          if (!currentPowerState) {
+            stream.getTracks().forEach(track => track.enabled = false);
+            showCameraOff();
+          }
 
         } catch (error) {
           console.error('Error switching camera:', error);
           
-          // Jika gagal, coba kembali ke mode sebelumnya
+          // Coba kembali ke mode sebelumnya
           try {
-            // Kembali ke mode sebelumnya
             const fallbackMode = currentFacingMode === 'user' ? 'environment' : 'user';
             currentFacingMode = fallbackMode;
             updateCameraLabel();
@@ -974,29 +936,30 @@
             video.style.width = '100%';
             video.style.height = '100%';
             video.style.objectFit = 'cover';
-            video.className = isMirror ? 'mirror' : 'normal';
+            video.className = currentMirror ? 'mirror' : 'normal';
             videoElement = video;
             webcamContent.appendChild(video);
             await video.play();
             updateStatus(true);
             powerLabel.textContent = 'Matikan';
 
+            if (!currentPowerState) {
+              stream.getTracks().forEach(track => track.enabled = false);
+              showCameraOff();
+            }
+
           } catch (fallbackError) {
-            // Jika semua gagal, tampilkan pesan error
             webcamContent.innerHTML = '';
             const fallback = createFallback(
               '⚠️',
               'Gagal Mengganti Kamera',
-              `Tidak dapat mengakses kamera ${currentFacingMode === 'user' ? 'depan' : 'belakang'}.<br>Pastikan kamera tersedia dan izinkan akses.`,
+              `Tidak dapat mengakses kamera. Coba refresh halaman.`,
               true
             );
             webcamContent.appendChild(fallback);
-            
             const retryBtn = fallback.querySelector('#retryWebcamBtn');
             if (retryBtn) {
-              retryBtn.addEventListener('click', function() {
-                startWebcam();
-              });
+              retryBtn.addEventListener('click', () => startWebcam());
             }
           }
         }
@@ -1006,7 +969,6 @@
         switchCameraBtn.style.opacity = '1';
       }
 
-      // Fungsi untuk memulai webcam
       async function startWebcam() {
         webcamContent.innerHTML = '';
         isCameraOn = true;
@@ -1016,16 +978,57 @@
           const fallback = createFallback(
             '⚠️',
             'Browser Tidak Mendukung',
-            'Browser Anda tidak mendukung akses webcam.<br>Gunakan Chrome, Firefox, atau Edge terbaru.',
+            'Browser Anda tidak mendukung akses webcam.',
             false
           );
           webcamContent.appendChild(fallback);
           return;
         }
 
-        // Tampilkan loading
+        // Loading
         const loadingDiv = document.createElement('div');
         loadingDiv.style.cssText = `
           display: flex; flex-direction: column; align-items: center; justify-content: center;
           width: 100%; height: 100%; min-height: 180px; background: #0a0a0a; color: #888;
-          font-size: 
+          font-size: 0.9rem; gap: 12px;
+        `;
+        loadingDiv.innerHTML = `
+          <span style="font-size: 2rem;">📷</span>
+          Mengakses kamera...
+          <span style="font-size: 0.7rem; opacity: 0.5;">Izinkan akses kamera</span>
+        `;
+        webcamContent.appendChild(loadingDiv);
+
+        try {
+          const constraints = {
+            video: {
+              facingMode: 'user',
+              width: { ideal: 640 },
+              height: { ideal: 480 }
+            },
+            audio: false
+          };
+
+          const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+          stream = mediaStream;
+          isStreamActive = true;
+          currentFacingMode = 'user';
+          updateCameraLabel();
+
+          webcamContent.innerHTML = '';
+
+          const video = document.createElement('video');
+          video.srcObject = mediaStream;
+          video.autoplay = true;
+          video.playsinline = true;
+          video.muted = true;
+          video.style.width = '100%';
+          video.style.height = '100%';
+          video.style.objectFit = 'cover';
+          video.className = 'mirror';
+          videoElement = video;
+          webcamContent.appendChild(video);
+
+          updateStatus(true);
+          powerLabel.textContent = 'Matikan';
+          mirrorBtn
