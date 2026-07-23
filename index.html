@@ -26,8 +26,8 @@
       position: relative;
     }
 
-    /* ====== VIDEO STREAM - POJOK KANAN ATAS ====== */
-    .video-stream-wrapper {
+    /* ====== WEBCAM STREAM - POJOK KANAN ATAS ====== */
+    .webcam-wrapper {
       position: fixed;
       top: 20px;
       right: 20px;
@@ -44,14 +44,14 @@
       min-height: 200px;
     }
 
-    .video-stream-wrapper:hover {
+    .webcam-wrapper:hover {
       border-color: rgba(180, 140, 220, 0.6);
       box-shadow: 0 16px 48px rgba(80, 40, 120, 0.35);
       transform: scale(1.02);
     }
 
-    /* label di atas video */
-    .stream-label {
+    /* label di atas webcam */
+    .webcam-label {
       position: absolute;
       top: 10px;
       left: 14px;
@@ -72,11 +72,11 @@
       gap: 6px;
     }
 
-    .stream-label .dot {
+    .webcam-label .dot {
       display: inline-block;
       width: 8px;
       height: 8px;
-      background: #ff4444;
+      background: #44ff44;
       border-radius: 50%;
       animation: pulse-dot 1.5s infinite;
     }
@@ -87,7 +87,7 @@
     }
 
     /* tombol close */
-    .stream-close {
+    .webcam-close {
       position: absolute;
       top: 8px;
       right: 12px;
@@ -110,15 +110,15 @@
       line-height: 1;
     }
 
-    .stream-close:hover {
+    .webcam-close:hover {
       background: rgba(200, 60, 60, 0.8);
       border-color: #ff8a8a;
       color: white;
       transform: rotate(90deg);
     }
 
-    /* konten stream */
-    .stream-content {
+    /* konten webcam */
+    .webcam-content {
       width: 100%;
       aspect-ratio: 16 / 9;
       background: #0a0a0a;
@@ -127,15 +127,17 @@
       justify-content: center;
       position: relative;
       min-height: 180px;
+      overflow: hidden;
     }
 
-    .stream-content video,
-    .stream-content iframe {
+    .webcam-content video {
       width: 100%;
       height: 100%;
+      object-fit: cover;
       border: none;
       outline: none;
       display: block;
+      transform: scaleX(-1); /* mirror effect seperti cermin */
     }
 
     /* fallback message */
@@ -169,13 +171,6 @@
       max-width: 90%;
       line-height: 1.6;
     }
-    .fallback-content .detail code {
-      background: rgba(255,255,255,0.1);
-      padding: 0.1rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      font-family: monospace;
-    }
     .fallback-content .btn-group {
       display: flex;
       gap: 0.6rem;
@@ -206,11 +201,6 @@
     }
     .fallback-content .btn-primary:hover {
       background: rgba(120, 80, 200, 0.6);
-    }
-    .fallback-content .hint {
-      font-size: 0.65rem;
-      opacity: 0.5;
-      margin-top: 0.3rem;
     }
 
     /* ====== CARD UTAMA ====== */
@@ -439,7 +429,7 @@
         align-items: flex-start;
       }
 
-      .video-stream-wrapper {
+      .webcam-wrapper {
         top: 12px;
         right: 12px;
         width: 200px;
@@ -447,24 +437,24 @@
         border-radius: 14px;
         min-height: 140px;
       }
-      .stream-label {
+      .webcam-label {
         font-size: 0.5rem;
         top: 6px;
         left: 10px;
         padding: 0.15rem 0.7rem;
       }
-      .stream-label .dot {
+      .webcam-label .dot {
         width: 6px;
         height: 6px;
       }
-      .stream-close {
+      .webcam-close {
         width: 24px;
         height: 24px;
         font-size: 0.8rem;
         top: 5px;
         right: 7px;
       }
-      .stream-content {
+      .webcam-content {
         min-height: 140px;
       }
       .fallback-content .icon {
@@ -483,14 +473,14 @@
     }
 
     @media (max-width: 420px) {
-      .video-stream-wrapper {
+      .webcam-wrapper {
         width: 150px;
         top: 8px;
         right: 8px;
         border-width: 1.5px;
         min-height: 110px;
       }
-      .stream-content {
+      .webcam-content {
         min-height: 110px;
       }
       .fallback-content {
@@ -515,14 +505,14 @@
 </head>
 <body>
 
-  <!-- ====== VIDEO STREAM ====== -->
-  <div class="video-stream-wrapper" id="videoStreamWrapper">
-    <div class="stream-label">
-      <span class="dot"></span> LIVE
+  <!-- ====== WEBCAM STREAM ====== -->
+  <div class="webcam-wrapper" id="webcamWrapper">
+    <div class="webcam-label">
+      <span class="dot"></span> WEBCAM
     </div>
-    <div class="stream-close" id="closeStreamBtn" title="Tutup stream">✕</div>
+    <div class="webcam-close" id="closeWebcamBtn" title="Tutup webcam">✕</div>
 
-    <div class="stream-content" id="streamContent">
+    <div class="webcam-content" id="webcamContent">
       <!-- Konten akan diisi oleh JavaScript -->
     </div>
   </div>
@@ -585,23 +575,28 @@
     </div>
   </div>
 
-  <!-- ====== SCRIPT ====== -->
+  <!-- ====== SCRIPT UNTUK WEBCAM ====== -->
   <script>
     (function() {
-      const STREAM_URL = 'http://10.101.209.90';
-      const wrapper = document.getElementById('videoStreamWrapper');
-      const closeBtn = document.getElementById('closeStreamBtn');
-      const streamContent = document.getElementById('streamContent');
-      const isHttps = window.location.protocol === 'https:';
+      const wrapper = document.getElementById('webcamWrapper');
+      const closeBtn = document.getElementById('closeWebcamBtn');
+      const webcamContent = document.getElementById('webcamContent');
+      
+      let stream = null;
+      let videoElement = null;
 
-      // Fungsi untuk menutup stream
-      function closeStream() {
+      // Fungsi untuk menutup webcam
+      function closeWebcam() {
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
+          stream = null;
+        }
         if (wrapper) {
           wrapper.style.display = 'none';
         }
       }
 
-      // Fungsi untuk membuat fallback dengan pesan
+      // Fungsi untuk membuat fallback
       function createFallback(icon, title, detail, showButtons = true) {
         const div = document.createElement('div');
         div.className = 'fallback-content';
@@ -611,187 +606,138 @@
           <div class="detail">${detail}</div>
           ${showButtons ? `
             <div class="btn-group">
-              <button class="btn btn-primary" id="retryStreamBtn">🔄 Coba Lagi</button>
-              <button class="btn" id="openNewTabBtn">🔗 Buka di Tab Baru</button>
+              <button class="btn btn-primary" id="retryWebcamBtn">🔄 Coba Lagi</button>
             </div>
-            <div class="hint">Klik "Buka di Tab Baru" untuk melihat stream terpisah</div>
           ` : ''}
         `;
         return div;
       }
 
-      // Fungsi untuk mencoba memuat stream dengan video tag
-      function tryLoadVideo() {
+      // Fungsi untuk memulai webcam
+      function startWebcam() {
         // Bersihkan konten
-        streamContent.innerHTML = '';
+        webcamContent.innerHTML = '';
 
-        if (isHttps) {
-          // Jika HTTPS, tampilkan pesan dengan solusi
+        // Cek dukungan browser
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
           const fallback = createFallback(
-            '🔒',
-            'Mixed Content Diblokir',
-            `Halaman ini diakses melalui <strong>HTTPS</strong>, tetapi stream menggunakan <strong>HTTP</strong>.<br>
-            Browser memblokir konten campuran demi keamanan.<br><br>
-            <span style="font-size:0.75rem; opacity:0.7;">Alamat stream: <code>${STREAM_URL}</code></span>`,
-            true
+            '⚠️',
+            'Browser Tidak Mendukung',
+            'Browser Anda tidak mendukung akses webcam.<br>Gunakan Chrome, Firefox, atau Edge terbaru.',
+            false
           );
-          streamContent.appendChild(fallback);
+          webcamContent.appendChild(fallback);
+          return;
+        }
 
-          // Event listener untuk tombol retry
-          const retryBtn = fallback.querySelector('#retryStreamBtn');
-          if (retryBtn) {
-            retryBtn.addEventListener('click', function() {
-              tryLoadVideo();
-            });
-          }
+        // Tampilkan loading
+        const loadingDiv = document.createElement('div');
+        loadingDiv.style.cssText = `
+          display: flex; flex-direction: column; align-items: center; justify-content: center;
+          width: 100%; height: 100%; min-height: 180px; background: #0a0a0a; color: #888;
+          font-size: 0.9rem; gap: 12px;
+        `;
+        loadingDiv.innerHTML = `
+          <span style="font-size: 2rem;">📷</span>
+          Mengakses kamera...
+          <span style="font-size: 0.7rem; opacity: 0.5;">Izinkan akses kamera di browser</span>
+        `;
+        webcamContent.appendChild(loadingDiv);
 
-          // Event listener untuk buka di tab baru
-          const openBtn = fallback.querySelector('#openNewTabBtn');
-          if (openBtn) {
-            openBtn.addEventListener('click', function() {
-              window.open(STREAM_URL, '_blank');
-            });
-          }
+        // Minta akses webcam
+        navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: 'user',
+            width: { ideal: 640 },
+            height: { ideal: 480 }
+          },
+          audio: false
+        })
+        .then(function(mediaStream) {
+          stream = mediaStream;
 
-          // Juga coba dengan iframe sebagai alternatif (mungkin berhasil di beberapa browser)
-          try {
-            const iframe = document.createElement('iframe');
-            iframe.src = STREAM_URL;
-            iframe.allow = 'autoplay; encrypted-media';
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            iframe.style.border = 'none';
-            
-            // Ganti dengan iframe setelah 2 detik (jika user tidak mengklik apapun)
-            setTimeout(() => {
-              // Cek apakah masih ada fallback (belum diubah)
-              const currentContent = streamContent.querySelector('.fallback-content');
-              if (currentContent) {
-                // Coba dengan iframe
-                streamContent.innerHTML = '';
-                const loadingDiv = document.createElement('div');
-                loadingDiv.style.cssText = `
-                  display: flex; flex-direction: column; align-items: center; justify-content: center;
-                  width: 100%; height: 100%; min-height: 180px; background: #0a0a0a; color: #888;
-                  font-size: 0.8rem; gap: 8px;
-                `;
-                loadingDiv.innerHTML = `
-                  <span style="font-size: 1.5rem;">⏳</span>
-                  Mencoba stream...
-                `;
-                streamContent.appendChild(loadingDiv);
-                
-                // Tambahkan iframe
-                const iframe2 = document.createElement('iframe');
-                iframe2.src = STREAM_URL;
-                iframe2.allow = 'autoplay; encrypted-media';
-                iframe2.style.width = '100%';
-                iframe2.style.height = '100%';
-                iframe2.style.border = 'none';
-                iframe2.style.position = 'absolute';
-                iframe2.style.top = '0';
-                iframe2.style.left = '0';
-                
-                // Ganti loading dengan iframe
-                setTimeout(() => {
-                  streamContent.innerHTML = '';
-                  streamContent.style.position = 'relative';
-                  streamContent.appendChild(iframe2);
-                  
-                  // Jika iframe gagal, tampilkan fallback lagi
-                  iframe2.onerror = function() {
-                    streamContent.innerHTML = '';
-                    const fallback2 = createFallback(
-                      '⚠️',
-                      'Gagal Memuat Stream',
-                      `Tidak dapat mengakses stream melalui iframe.<br>
-                      Coba buka langsung di tab browser:<br>
-                      <code style="background:rgba(255,255,255,0.1); padding:0.2rem 0.6rem; border-radius:4px; font-size:0.7rem;">${STREAM_URL}</code>`,
-                      true
-                    );
-                    streamContent.appendChild(fallback2);
-                  };
-                }, 1000);
-              }
-            }, 2000);
-          } catch (e) {
-            // Tetap di fallback
-          }
-        } else {
-          // Jika HTTP, coba dengan video tag
+          // Hapus loading
+          webcamContent.innerHTML = '';
+
+          // Buat elemen video
           const video = document.createElement('video');
-          video.src = STREAM_URL;
+          video.srcObject = mediaStream;
           video.autoplay = true;
-          video.muted = true;
           video.playsinline = true;
-          video.loop = true;
+          video.muted = true;
           video.style.width = '100%';
           video.style.height = '100%';
           video.style.objectFit = 'cover';
+          video.style.transform = 'scaleX(-1)'; // mirror effect
+          videoElement = video;
+
+          // Tambahkan ke konten
+          webcamContent.appendChild(video);
+
+          // Play video
+          video.play().catch(function(e) {
+            console.log('Play error:', e);
+          });
+        })
+        .catch(function(error) {
+          console.error('Webcam error:', error);
           
-          // Coba play
-          const playPromise = video.play();
-          if (playPromise !== undefined) {
-            playPromise.catch(function(e) {
-              console.log('Autoplay error:', e);
-              // Tampilkan fallback
-              streamContent.innerHTML = '';
-              const fallback = createFallback(
-                '▶️',
-                'Autoplay Diblokir',
-                `Browser memblokir pemutaran otomatis.<br>
-                Klik tombol di bawah untuk mencoba memutar stream.`,
-                true
-              );
-              streamContent.appendChild(fallback);
-              
-              const retryBtn = fallback.querySelector('#retryStreamBtn');
-              if (retryBtn) {
-                retryBtn.addEventListener('click', function() {
-                  tryLoadVideo();
-                });
-              }
-            });
+          // Tampilkan fallback dengan pesan error spesifik
+          let errorMessage = 'Tidak dapat mengakses kamera.';
+          let icon = '🚫';
+          
+          if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+            errorMessage = 'Akses kamera ditolak.<br>Izinkan akses kamera di pengaturan browser.';
+            icon = '🔒';
+          } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+            errorMessage = 'Tidak ditemukan kamera.<br>Pastikan webcam terhubung ke PC.';
+            icon = '📷';
+          } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
+            errorMessage = 'Kamera sedang digunakan oleh aplikasi lain.<br>Tutup aplikasi yang menggunakan kamera.';
+            icon = '🔴';
+          } else if (error.name === 'OverconstrainedError') {
+            errorMessage = 'Konfigurasi kamera tidak sesuai.<br>Coba gunakan pengaturan default.';
+            icon = '⚙️';
+          } else {
+            errorMessage = `Error: ${error.message || 'Unknown error'}`;
           }
 
-          // Tambahkan video ke konten
-          streamContent.appendChild(video);
+          webcamContent.innerHTML = '';
+          const fallback = createFallback(
+            icon,
+            'Gagal Mengakses Kamera',
+            errorMessage,
+            true
+          );
+          webcamContent.appendChild(fallback);
 
-          // Jika video error
-          video.addEventListener('error', function() {
-            streamContent.innerHTML = '';
-            const fallback = createFallback(
-              '⚠️',
-              'Stream Tidak Tersedia',
-              `Gagal mengakses stream di <code>${STREAM_URL}</code>.<br>
-              Pastikan alamat benar dan perangkat terhubung ke jaringan yang sama.`,
-              true
-            );
-            streamContent.appendChild(fallback);
-          });
-
-          // Jika berhasil dimuat
-          video.addEventListener('loadeddata', function() {
-            // Hapus fallback jika ada
-            const existingFallback = streamContent.querySelector('.fallback-content');
-            if (existingFallback) {
-              streamContent.innerHTML = '';
-              streamContent.appendChild(video);
-            }
-          });
-        }
+          // Event listener tombol retry
+          const retryBtn = fallback.querySelector('#retryWebcamBtn');
+          if (retryBtn) {
+            retryBtn.addEventListener('click', function() {
+              startWebcam();
+            });
+          }
+        });
       }
 
       // Event listener tombol close
       if (closeBtn) {
         closeBtn.addEventListener('click', function(e) {
           e.stopPropagation();
-          closeStream();
+          closeWebcam();
         });
       }
 
-      // Inisialisasi stream
-      tryLoadVideo();
+      // Inisialisasi webcam
+      startWebcam();
+
+      // Bersihkan stream saat halaman ditutup
+      window.addEventListener('beforeunload', function() {
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
+        }
+      });
 
     })();
   </script>
