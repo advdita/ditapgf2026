@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Perkenalan · Adventia Putri Pradita</title>
-  <!-- Font & gaya dasar -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
@@ -32,7 +31,6 @@
       position: relative;
     }
 
-    /* ====== WEBCAM STREAM - POJOK KANAN ATAS ====== */
     .webcam-wrapper {
       position: fixed;
       top: 20px;
@@ -221,7 +219,6 @@
       transform: scaleX(1);
     }
 
-    /* Canvas untuk FaceMesh */
     #faceMeshCanvas {
       position: absolute;
       top: 0;
@@ -320,7 +317,6 @@
       background: rgba(120, 80, 200, 0.6);
     }
 
-    /* ====== CARD UTAMA ====== */
     .card {
       max-width: 720px;
       width: 100%;
@@ -512,7 +508,6 @@
       backdrop-filter: blur(2px);
     }
 
-    /* ====== RESPONSIVE ====== */
     @media (max-width: 550px) {
       .card {
         padding: 2rem 1.5rem;
@@ -653,7 +648,6 @@
 </head>
 <body>
 
-  <!-- ====== WEBCAM STREAM ====== -->
   <div class="webcam-wrapper" id="webcamWrapper">
     <div class="webcam-label">
       <span class="dot" id="statusDot"></span> <span id="statusText">WEBCAM</span>
@@ -661,11 +655,10 @@
     <div class="webcam-close" id="closeWebcamBtn" title="Tutup webcam">✕</div>
 
     <div class="webcam-content" id="webcamContent">
-      <video id="webcamVideo" class="mirror" autoplay playsinline></video>
+      <video id="webcamVideo" class="mirror" autoplay playsinline muted></video>
       <canvas id="faceMeshCanvas"></canvas>
     </div>
 
-    <!-- Kontrol webcam -->
     <div class="webcam-controls" id="webcamControls">
       <button class="ctrl-btn active" id="faceMeshBtn" title="FaceMesh Detection">
         <span class="icon">👤</span> FaceMesh
@@ -679,18 +672,14 @@
     </div>
   </div>
 
-  <!-- ====== CARD PERKENALAN ====== -->
   <div class="card">
     <div class="badge">✨ perkenalan</div>
-
     <div class="greeting">
       <span>👋 Halo,</span> selamat datang di profil singkat saya
     </div>
-
     <h1>
       <span class="name-highlight">Adventia Putri Pradita</span>
     </h1>
-
     <div class="subhead">
       <span style="font-weight: 300; color: #4d3562;">saya adalah</span>
       <span class="job-pill">
@@ -698,16 +687,13 @@
         <small>· pendidik</small>
       </span>
     </div>
-
     <div class="divider"></div>
-
     <div class="description">
       <strong>Adventia Putri Pradita</strong> — seorang pendidik yang berdedikasi di 
       <strong>SANUR</strong>. Dengan semangat mengajar dan membimbing, saya percaya 
       bahwa setiap hari adalah kesempatan untuk menumbuhkan rasa ingin tahu dan 
       membantu siswa menemukan potensi terbaik mereka.
     </div>
-
     <div class="info-grid">
       <div class="info-item">
         <i>🧑‍🏫</i>
@@ -725,7 +711,6 @@
         <span class="value">Belajar & Tumbuh</span>
       </div>
     </div>
-
     <div class="footer-note">
       <div style="display: flex; align-items: center; gap: 12px;">
         <span class="emoji-big">📚</span>
@@ -737,7 +722,6 @@
     </div>
   </div>
 
-  <!-- ====== SCRIPT UNTUK WEBCAM + FACEMESH ====== -->
   <script>
     (function() {
       const video = document.getElementById('webcamVideo');
@@ -760,7 +744,6 @@
       let faceMesh = null;
       let isFaceMeshLoaded = false;
 
-      // ====== FUNGSI UTILITY ======
       function updateStatus(active) {
         if (active) {
           statusDot.className = 'dot';
@@ -781,7 +764,7 @@
         canvas.style.height = '100%';
       }
 
-      // ====== FACEMESH ======
+      // FACEMESH
       function initFaceMesh() {
         try {
           faceMesh = new FaceMesh({
@@ -806,9 +789,9 @@
           });
 
           isFaceMeshLoaded = true;
-          console.log('FaceMesh loaded successfully');
+          console.log('FaceMesh loaded');
         } catch (error) {
-          console.error('Error loading FaceMesh:', error);
+          console.error('FaceMesh error:', error);
           isFaceMeshLoaded = false;
         }
       }
@@ -824,7 +807,6 @@
         const width = canvas.width;
         const height = canvas.height;
 
-        // Gambar titik-titik landmark
         for (const landmark of landmarks) {
           const x = landmark.x * width;
           const y = landmark.y * height;
@@ -847,7 +829,6 @@
           canvasCtx.shadowBlur = 0;
         }
 
-        // Koneksi antar titik
         const connections = [
           [61, 146], [146, 91], [91, 181], [181, 84], [84, 17], [17, 314], [314, 405],
           [405, 321], [321, 375], [375, 291], [61, 185], [185, 40], [40, 39], [39, 37],
@@ -890,13 +871,12 @@
         }
         canvasCtx.shadowBlur = 0;
 
-        // Informasi jumlah titik
         canvasCtx.fillStyle = 'rgba(0, 255, 136, 0.6)';
         canvasCtx.font = '12px Inter, sans-serif';
         canvasCtx.fillText(`👤 ${landmarks.length} titik`, 10, 25);
       }
 
-      // ====== FUNGSI KAMERA ======
+      // FUNGSI KAMERA
       function showCameraOff() {
         const existingOverlay = webcamContent.querySelector('.camera-off-overlay');
         if (existingOverlay) return;
@@ -935,4 +915,26 @@
 
       function toggleFlip() {
         isMirror = !isMirror;
-        video.className = isMirror ? 'mirror' : '
+        video.className = isMirror ? 'mirror' : 'normal';
+        flipBtn.classList.toggle('active');
+      }
+
+      function toggleFaceMesh() {
+        isFaceMeshEnabled = !isFaceMeshEnabled;
+        faceMeshBtn.classList.toggle('active');
+        if (!isFaceMeshEnabled) {
+          canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      function closeWebcam() {
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
+          stream = null;
+        }
+        if (wrapper) wrapper.style.display = 'none';
+      }
+
+      // START WEBCAM
+      async function startWebcam() {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
