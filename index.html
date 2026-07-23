@@ -4,10 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Perkenalan · Adventia Putri Pradita</title>
-  <!-- Font & gaya dasar -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  
+  <!-- MediaPipe FaceMesh -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+
   <style>
     * {
       margin: 0;
@@ -31,34 +36,33 @@
       position: fixed;
       top: 20px;
       right: 20px;
-      width: 340px;
-      max-width: 38vw;
-      background: rgba(0, 0, 0, 0.75);
+      width: 380px;
+      max-width: 42vw;
+      background: rgba(0, 0, 0, 0.85);
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
       border: 2px solid rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(8px);
       z-index: 999;
       transition: all 0.3s ease;
-      min-height: 200px;
+      min-height: 220px;
     }
 
     .webcam-wrapper:hover {
       border-color: rgba(180, 140, 220, 0.6);
-      box-shadow: 0 16px 48px rgba(80, 40, 120, 0.35);
+      box-shadow: 0 16px 48px rgba(80, 40, 120, 0.4);
       transform: scale(1.02);
     }
 
-    /* label di atas webcam */
     .webcam-label {
       position: absolute;
       top: 10px;
       left: 14px;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.8);
       backdrop-filter: blur(4px);
       color: #ddd0f0;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 600;
       letter-spacing: 0.5px;
       padding: 0.25rem 1rem;
@@ -91,12 +95,11 @@
       50% { opacity: 0.3; transform: scale(0.8); }
     }
 
-    /* tombol close */
     .webcam-close {
       position: absolute;
       top: 8px;
       right: 12px;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(4px);
       color: #d4c0ee;
       border: 1px solid rgba(255, 255, 255, 0.15);
@@ -122,7 +125,6 @@
       transform: rotate(90deg);
     }
 
-    /* kontrol webcam - di dalam video */
     .webcam-controls {
       position: absolute;
       bottom: 12px;
@@ -131,13 +133,15 @@
       display: flex;
       gap: 8px;
       z-index: 10;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(8px);
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 40px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       opacity: 0;
       transition: opacity 0.3s ease;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .webcam-wrapper:hover .webcam-controls {
@@ -148,7 +152,7 @@
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.12);
       color: #e0d0f0;
-      padding: 5px 12px;
+      padding: 5px 14px;
       border-radius: 30px;
       cursor: pointer;
       font-size: 0.7rem;
@@ -157,7 +161,7 @@
       transition: 0.2s;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       white-space: nowrap;
     }
 
@@ -186,7 +190,6 @@
       font-size: 0.9rem;
     }
 
-    /* konten webcam */
     .webcam-content {
       width: 100%;
       aspect-ratio: 16 / 9;
@@ -195,7 +198,7 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      min-height: 180px;
+      min-height: 200px;
       overflow: hidden;
     }
 
@@ -206,17 +209,21 @@
       border: none;
       outline: none;
       display: block;
-    }
-
-    .webcam-content video.mirror {
+      background: #0a0a0a;
       transform: scaleX(-1);
     }
 
-    .webcam-content video.normal {
-      transform: scaleX(1);
+    /* Canvas untuk FaceMesh */
+    #faceMeshCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
     }
 
-    /* overlay saat kamera mati */
     .camera-off-overlay {
       position: absolute;
       top: 0;
@@ -243,7 +250,6 @@
       opacity: 0.5;
     }
 
-    /* fallback message */
     .fallback-content {
       display: flex;
       flex-direction: column;
@@ -535,8 +541,8 @@
       .webcam-wrapper {
         top: 12px;
         right: 12px;
-        width: 200px;
-        max-width: 45vw;
+        width: 220px;
+        max-width: 48vw;
         border-radius: 14px;
         min-height: 140px;
       }
@@ -561,14 +567,14 @@
         min-height: 140px;
       }
       .webcam-controls {
-        bottom: 8px;
+        bottom: 6px;
         padding: 4px 10px;
-        gap: 5px;
+        gap: 4px;
         opacity: 1;
       }
       .webcam-controls .ctrl-btn {
-        font-size: 0.6rem;
-        padding: 3px 8px;
+        font-size: 0.55rem;
+        padding: 3px 10px;
       }
       .webcam-controls .ctrl-btn .icon {
         font-size: 0.7rem;
@@ -596,7 +602,7 @@
 
     @media (max-width: 420px) {
       .webcam-wrapper {
-        width: 150px;
+        width: 160px;
         top: 8px;
         right: 8px;
         border-width: 1.5px;
@@ -606,16 +612,16 @@
         min-height: 110px;
       }
       .webcam-controls {
-        bottom: 5px;
+        bottom: 4px;
         padding: 3px 6px;
         gap: 3px;
       }
       .webcam-controls .ctrl-btn {
-        font-size: 0.5rem;
+        font-size: 0.45rem;
         padding: 2px 6px;
       }
       .webcam-controls .ctrl-btn .icon {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
       }
       .fallback-content {
         min-height: 110px;
@@ -647,13 +653,14 @@
     <div class="webcam-close" id="closeWebcamBtn" title="Tutup webcam">✕</div>
 
     <div class="webcam-content" id="webcamContent">
-      <!-- Konten akan diisi oleh JavaScript -->
+      <video id="webcamVideo" autoplay playsinline></video>
+      <canvas id="faceMeshCanvas"></canvas>
     </div>
 
     <!-- Kontrol webcam -->
     <div class="webcam-controls" id="webcamControls">
-      <button class="ctrl-btn active" id="flipBtn" title="Flip/Mirror">
-        <span class="icon">🔄</span> Flip
+      <button class="ctrl-btn active" id="faceMeshBtn" title="FaceMesh Detection">
+        <span class="icon">👤</span> FaceMesh
       </button>
       <button class="ctrl-btn off-btn" id="powerBtn" title="Matikan/Hidupkan Kamera">
         <span class="icon">⏻</span> <span id="powerLabel">Matikan</span>
@@ -719,25 +726,29 @@
     </div>
   </div>
 
-  <!-- ====== SCRIPT UNTUK WEBCAM ====== -->
+  <!-- ====== SCRIPT ====== -->
   <script>
     (function() {
+      const video = document.getElementById('webcamVideo');
+      const canvas = document.getElementById('faceMeshCanvas');
+      const canvasCtx = canvas.getContext('2d');
+      const webcamContent = document.getElementById('webcamContent');
       const wrapper = document.getElementById('webcamWrapper');
       const closeBtn = document.getElementById('closeWebcamBtn');
-      const webcamContent = document.getElementById('webcamContent');
-      const flipBtn = document.getElementById('flipBtn');
       const powerBtn = document.getElementById('powerBtn');
       const powerLabel = document.getElementById('powerLabel');
       const statusDot = document.getElementById('statusDot');
       const statusText = document.getElementById('statusText');
-      
-      let stream = null;
-      let videoElement = null;
-      let isMirror = true;
-      let isCameraOn = true;
-      let isStreamActive = false;
+      const faceMeshBtn = document.getElementById('faceMeshBtn');
 
-      // Fungsi untuk update status UI
+      let stream = null;
+      let isCameraOn = true;
+      let isFaceMeshEnabled = true;
+      let faceMesh = null;
+      let isFaceMeshLoaded = false;
+      let animationFrameId = null;
+
+      // ====== FUNGSI UTILITY ======
       function updateStatus(active) {
         if (active) {
           statusDot.className = 'dot';
@@ -750,259 +761,182 @@
         }
       }
 
-      // Fungsi untuk membuat fallback
-      function createFallback(icon, title, detail, showButtons = true) {
-        const div = document.createElement('div');
-        div.className = 'fallback-content';
-        div.innerHTML = `
-          <div class="icon">${icon}</div>
-          <div class="title">${title}</div>
-          <div class="detail">${detail}</div>
-          ${showButtons ? `
-            <div class="btn-group">
-              <button class="btn btn-primary" id="retryWebcamBtn">🔄 Coba Lagi</button>
-            </div>
-          ` : ''}
-        `;
-        return div;
+      function resizeCanvas() {
+        const rect = webcamContent.getBoundingClientRect();
+        canvas.width = rect.width || 380;
+        canvas.height = rect.height || 213;
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
       }
 
-      // Fungsi untuk menampilkan overlay "Kamera Mati"
-      function showCameraOff() {
-        // Hapus semua konten kecuali overlay
-        const existingOverlay = webcamContent.querySelector('.camera-off-overlay');
-        if (existingOverlay) return;
+      // ====== FACEMESH ======
+      function initFaceMesh() {
+        try {
+          faceMesh = new FaceMesh({
+            locateFile: (file) => {
+              return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+            }
+          });
 
-        // Sembunyikan video jika ada
-        if (videoElement) {
-          videoElement.style.display = 'none';
+          faceMesh.setOptions({
+            maxNumFaces: 1,
+            refineLandmarks: true,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+          });
+
+          faceMesh.onResults((results) => {
+            if (!isFaceMeshEnabled || !isCameraOn) {
+              canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+              return;
+            }
+            drawFaceMesh(results);
+          });
+
+          isFaceMeshLoaded = true;
+          console.log('FaceMesh loaded successfully');
+        } catch (error) {
+          console.error('Error loading FaceMesh:', error);
+          isFaceMeshLoaded = false;
+        }
+      }
+
+      function drawFaceMesh(results) {
+        canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        if (!results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) {
+          return;
         }
 
+        const landmarks = results.multiFaceLandmarks[0];
+        const width = canvas.width;
+        const height = canvas.height;
+
+        // Gambar titik-titik landmark
+        for (const landmark of landmarks) {
+          const x = landmark.x * width;
+          const y = landmark.y * height;
+          
+          const gradient = canvasCtx.createRadialGradient(x, y, 0, x, y, 4);
+          gradient.addColorStop(0, '#00ff88');
+          gradient.addColorStop(1, '#00ccff');
+          
+          canvasCtx.beginPath();
+          canvasCtx.arc(x, y, 2, 0, 2 * Math.PI);
+          canvasCtx.fillStyle = gradient;
+          canvasCtx.fill();
+          
+          canvasCtx.shadowColor = 'rgba(0, 255, 136, 0.3)';
+          canvasCtx.shadowBlur = 8;
+          canvasCtx.beginPath();
+          canvasCtx.arc(x, y, 4, 0, 2 * Math.PI);
+          canvasCtx.fillStyle = 'rgba(0, 255, 136, 0.1)';
+          canvasCtx.fill();
+          canvasCtx.shadowBlur = 0;
+        }
+
+        // Koneksi antar titik
+        const connections = [
+          [61, 146], [146, 91], [91, 181], [181, 84], [84, 17], [17, 314], [314, 405],
+          [405, 321], [321, 375], [375, 291], [61, 185], [185, 40], [40, 39], [39, 37],
+          [37, 0], [0, 267], [267, 269], [269, 270], [270, 409], [409, 291],
+          [33, 7], [7, 163], [163, 144], [144, 145], [145, 153], [153, 154],
+          [154, 155], [155, 133], [33, 246], [246, 161], [161, 160], [160, 159],
+          [159, 158], [158, 157], [157, 173], [173, 133],
+          [362, 382], [382, 381], [381, 380], [380, 374], [374, 373], [373, 390],
+          [390, 249], [249, 263], [263, 466], [466, 388], [388, 387], [387, 386],
+          [386, 385], [385, 384], [384, 398], [398, 362],
+          [46, 53], [53, 52], [52, 65], [65, 55],
+          [276, 283], [283, 282], [282, 295], [295, 285],
+          [4, 197], [197, 195], [195, 5], [5, 4],
+          [1, 19], [19, 24], [24, 23], [23, 21], [21, 1],
+          [10, 338], [338, 297], [297, 332], [332, 284], [284, 251], [251, 389],
+          [389, 356], [356, 454], [454, 323], [323, 361], [361, 288], [288, 397],
+          [397, 365], [365, 379], [379, 378], [378, 400], [400, 377], [377, 152],
+          [152, 148], [148, 176], [176, 149], [149, 150], [150, 136], [136, 172],
+          [172, 58], [58, 132], [132, 93], [93, 234], [234, 127], [127, 162],
+          [162, 21], [21, 54], [54, 103], [103, 67], [67, 109], [109, 10]
+        ];
+
+        canvasCtx.strokeStyle = 'rgba(0, 255, 200, 0.3)';
+        canvasCtx.lineWidth = 1;
+        canvasCtx.shadowColor = 'rgba(0, 255, 200, 0.2)';
+        canvasCtx.shadowBlur = 4;
+
+        for (const [i, j] of connections) {
+          if (landmarks[i] && landmarks[j]) {
+            const x1 = landmarks[i].x * width;
+            const y1 = landmarks[i].y * height;
+            const x2 = landmarks[j].x * width;
+            const y2 = landmarks[j].y * height;
+            
+            canvasCtx.beginPath();
+            canvasCtx.moveTo(x1, y1);
+            canvasCtx.lineTo(x2, y2);
+            canvasCtx.stroke();
+          }
+        }
+        canvasCtx.shadowBlur = 0;
+
+        // Informasi jumlah titik
+        canvasCtx.fillStyle = 'rgba(0, 255, 136, 0.6)';
+        canvasCtx.font = '12px Inter, sans-serif';
+        canvasCtx.fillText(`👤 ${landmarks.length} titik`, 10, 25);
+      }
+
+      // ====== FUNGSI KAMERA ======
+      function showCameraOff() {
+        const existingOverlay = webcamContent.querySelector('.camera-off-overlay');
+        if (existingOverlay) return;
+        video.style.display = 'none';
         const overlay = document.createElement('div');
         overlay.className = 'camera-off-overlay';
         overlay.id = 'cameraOffOverlay';
         overlay.innerHTML = `
           <div class="big-icon">📷</div>
           <div class="label">Kamera dimatikan</div>
-          <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 4px;">Klik tombol "Hidupkan" untuk mengaktifkan</div>
+          <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 4px;">Klik "Hidupkan" untuk mengaktifkan</div>
         `;
         webcamContent.appendChild(overlay);
         updateStatus(false);
         isCameraOn = false;
       }
 
-      // Fungsi untuk menghilangkan overlay "Kamera Mati"
       function hideCameraOff() {
         const overlay = document.getElementById('cameraOffOverlay');
-        if (overlay) {
-          overlay.remove();
-        }
-        if (videoElement) {
-          videoElement.style.display = 'block';
-        }
+        if (overlay) overlay.remove();
+        video.style.display = 'block';
         updateStatus(true);
         isCameraOn = true;
       }
 
-      // Fungsi untuk menutup webcam (full close)
+      function toggleCamera() {
+        if (!stream) return;
+        if (isCameraOn) {
+          stream.getTracks().forEach(track => track.enabled = false);
+          showCameraOff();
+        } else {
+          stream.getTracks().forEach(track => track.enabled = true);
+          hideCameraOff();
+        }
+      }
+
       function closeWebcam() {
         if (stream) {
           stream.getTracks().forEach(track => track.stop());
           stream = null;
         }
-        isStreamActive = false;
-        if (wrapper) {
-          wrapper.style.display = 'none';
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = null;
         }
+        if (wrapper) wrapper.style.display = 'none';
       }
 
-      // Fungsi untuk matikan/hidupkan kamera (tanpa menutup stream)
-      function toggleCamera() {
-        if (!stream) return;
-
-        if (isCameraOn) {
-          // Matikan kamera
-          stream.getTracks().forEach(track => {
-            track.enabled = false;
-          });
-          showCameraOff();
-          isCameraOn = false;
-          powerLabel.textContent = 'Hidupkan';
-        } else {
-          // Hidupkan kamera
-          stream.getTracks().forEach(track => {
-            track.enabled = true;
-          });
-          hideCameraOff();
-          isCameraOn = true;
-          powerLabel.textContent = 'Matikan';
-        }
-      }
-
-      // Fungsi untuk toggle flip/mirror
-      function toggleFlip() {
-        if (!videoElement) return;
-        isMirror = !isMirror;
-        if (isMirror) {
-          videoElement.className = 'mirror';
-          flipBtn.classList.add('active');
-        } else {
-          videoElement.className = 'normal';
-          flipBtn.classList.remove('active');
-        }
-      }
-
-      // Fungsi untuk memulai webcam
-      function startWebcam() {
-        // Bersihkan konten
+      // ====== INISIALISASI ======
+      async function startWebcam() {
         webcamContent.innerHTML = '';
-        isCameraOn = true;
-
-        // Cek dukungan browser
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          const fallback = createFallback(
-            '⚠️',
-            'Browser Tidak Mendukung',
-            'Browser Anda tidak mendukung akses webcam.<br>Gunakan Chrome, Firefox, atau Edge terbaru.',
-            false
-          );
-          webcamContent.appendChild(fallback);
-          return;
-        }
-
-        // Tampilkan loading
-        const loadingDiv = document.createElement('div');
-        loadingDiv.style.cssText = `
-          display: flex; flex-direction: column; align-items: center; justify-content: center;
-          width: 100%; height: 100%; min-height: 180px; background: #0a0a0a; color: #888;
-          font-size: 0.9rem; gap: 12px;
-        `;
-        loadingDiv.innerHTML = `
-          <span style="font-size: 2rem;">📷</span>
-          Mengakses kamera...
-          <span style="font-size: 0.7rem; opacity: 0.5;">Izinkan akses kamera di browser</span>
-        `;
-        webcamContent.appendChild(loadingDiv);
-
-        // Minta akses webcam
-        navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: 'user',
-            width: { ideal: 640 },
-            height: { ideal: 480 }
-          },
-          audio: false
-        })
-        .then(function(mediaStream) {
-          stream = mediaStream;
-          isStreamActive = true;
-
-          // Hapus loading
-          webcamContent.innerHTML = '';
-
-          // Buat elemen video
-          const video = document.createElement('video');
-          video.srcObject = mediaStream;
-          video.autoplay = true;
-          video.playsinline = true;
-          video.muted = true;
-          video.style.width = '100%';
-          video.style.height = '100%';
-          video.style.objectFit = 'cover';
-          video.className = 'mirror'; // default mirror
-          videoElement = video;
-
-          // Tambahkan ke konten
-          webcamContent.appendChild(video);
-
-          // Update status
-          updateStatus(true);
-          isCameraOn = true;
-          powerLabel.textContent = 'Matikan';
-
-          // Play video
-          video.play().catch(function(e) {
-            console.log('Play error:', e);
-          });
-        })
-        .catch(function(error) {
-          console.error('Webcam error:', error);
-          
-          // Tampilkan fallback dengan pesan error spesifik
-          let errorMessage = 'Tidak dapat mengakses kamera.';
-          let icon = '🚫';
-          
-          if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-            errorMessage = 'Akses kamera ditolak.<br>Izinkan akses kamera di pengaturan browser.';
-            icon = '🔒';
-          } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
-            errorMessage = 'Tidak ditemukan kamera.<br>Pastikan webcam terhubung ke PC.';
-            icon = '📷';
-          } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
-            errorMessage = 'Kamera sedang digunakan oleh aplikasi lain.<br>Tutup aplikasi yang menggunakan kamera.';
-            icon = '🔴';
-          } else if (error.name === 'OverconstrainedError') {
-            errorMessage = 'Konfigurasi kamera tidak sesuai.<br>Coba gunakan pengaturan default.';
-            icon = '⚙️';
-          } else {
-            errorMessage = `Error: ${error.message || 'Unknown error'}`;
-          }
-
-          webcamContent.innerHTML = '';
-          const fallback = createFallback(
-            icon,
-            'Gagal Mengakses Kamera',
-            errorMessage,
-            true
-          );
-          webcamContent.appendChild(fallback);
-
-          // Event listener tombol retry
-          const retryBtn = fallback.querySelector('#retryWebcamBtn');
-          if (retryBtn) {
-            retryBtn.addEventListener('click', function() {
-              startWebcam();
-            });
-          }
-        });
-      }
-
-      // Event listener tombol close
-      if (closeBtn) {
-        closeBtn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          closeWebcam();
-        });
-      }
-
-      // Event listener tombol flip
-      if (flipBtn) {
-        flipBtn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          toggleFlip();
-        });
-      }
-
-      // Event listener tombol power
-      if (powerBtn) {
-        powerBtn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          toggleCamera();
-        });
-      }
-
-      // Inisialisasi webcam
-      startWebcam();
-
-      // Bersihkan stream saat halaman ditutup
-      window.addEventListener('beforeunload', function() {
-        if (stream) {
-          stream.getTracks().forEach(track => track.stop());
-        }
-      });
-
-    })();
-  </script>
-
-</body>
-</html>
+        // Kembalikan video dan canvas
+        const newVideo = document.createElement('video');
+        newVideo.id = 'webcamVideo';
+       
